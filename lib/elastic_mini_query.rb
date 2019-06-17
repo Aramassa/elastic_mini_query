@@ -1,12 +1,7 @@
 require "elastic_mini_query/version"
-require "elastic_mini_query/http_methods"
+require "elastic_mini_query/client/base"
 
 module ElasticMiniQuery
-  class Client
-    include ElasticMiniQuery::HttpMethods
-  end
-  
-
   class Error < StandardError; end
   # Your code goes here...
 end
