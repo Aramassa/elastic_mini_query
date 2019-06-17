@@ -36,7 +36,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 bundle exec rspec
 ```
 
-Or
+Or with docker-compose(recommended)
 
 ```sh
 docker-compose -f docker-compose.yml -f docker-compose/rspec.yml run app
