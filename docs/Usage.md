@@ -39,22 +39,41 @@ esq.agg
 
 ```ruby
 res = esq.q("hello")
-res.each do |row, info|
+res.docs.each do |row, info|
   # data processing
 end
 
 ## other fetch methods.
-
-res.each_all
+res.fetch_all
 res.fetch_page
 ```
 
 ### Response Types
 
+```ruby
+res = esq.q("hello")
+
+class QueryResponse
+```
+
 #### Query Information
 
+```ruby
+info = res.info
+
+class ResponseSummary
+```
 
 #### Search Results
 
+```ruby
+search_result = res.docs
+class SearchResult
+```
 
 #### Aggregation Results
+
+```ruby
+aggregation_result = res.aggs
+class AggResult
+```
