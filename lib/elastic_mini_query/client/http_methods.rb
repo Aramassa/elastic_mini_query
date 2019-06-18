@@ -1,19 +1,13 @@
 module ElasticMiniQuery::Client
   module HttpMethods
     module ClassMethods
-      def elastic_mini_host(host)
-        @host = host
-      end
-
-      def host
+      def elastic_mini_host(host=nil)
+        @host = host unless host.nil?
         @host
       end
 
-      def elastic_mini_api_key(key)
-        @key = key
-      end
-
-      def api_key
+      def elastic_mini_api_key(key=nil)
+        @key = key unless key.nil?
         @key
       end
     end
