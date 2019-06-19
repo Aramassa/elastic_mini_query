@@ -17,6 +17,14 @@ RSpec.describe ElasticMiniQuery do
   end
 end
 
+RSpec.describe ElasticMiniQuery::Query::Result::Raw do
+  context "parsing raw result" do
+    it "basic query" do
+      
+    end
+  end
+end
+
 RSpec.describe ElasticMiniQuery::Result::Summary do
   context "Attribute Method" do
     let(:summary){
