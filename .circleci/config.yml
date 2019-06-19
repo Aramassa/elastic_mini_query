@@ -1,0 +1,24 @@
+# Use the latest 2.1 version of CircleCI pipeline processing engine, see https://circleci.com/docs/2.0/configuration-reference/
+version: 2.1
+
+executors:
+  base-rails:
+    working_directory: /app
+    docker:
+      - image: mosac/rails-start:2.6.3-rails5.2.3
+
+jobs:
+  do-rspec:
+    executor: base-rails
+    steps:
+      - checkout
+      - run: bundle install
+      - run: bundle exec rspec
+
+# Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
+workflows:
+  version: 2
+  rspec:
+    jobs:
+      - do-rspec
+
