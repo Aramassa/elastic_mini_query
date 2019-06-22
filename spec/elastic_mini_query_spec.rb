@@ -33,9 +33,17 @@ RSpec.describe ElasticMiniQuery::Query::Response do
   context "parsing raw result" do
     it "basic query" do
       res = dummy_response
-      expect(res.summary.took).to eq(13)
-      expect(res.summary.total_hits).to eq(40318)
-      expect(res.summary.timed_out).to be_falsey
+      s = res.summary
+
+      expect(s.took).to eq(13)
+      expect(s.total_hits).to eq(40318)
+      expect(s.total_hits_relation).to eq("eq")
+      expect(s.timed_out).to be_falsey
+
+      r = res.search
+      expect(r.hits.count).to eq(200)
+      expect(r.hits.first["_id"]).to eq("201905210114")
+      expect(r.sources.first["CADJPY_max"]).to eq("82.0265")
     end
   end
 end
