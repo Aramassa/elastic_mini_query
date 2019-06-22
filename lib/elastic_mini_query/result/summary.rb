@@ -1,6 +1,8 @@
-module ElasticMiniQuery::Result
-  class Summary
+module ElasticMiniQuery
+  module Result
+    class Summary
 
-    attr_accessor :timed_out, :total_hits, :total_hits_relation
+      attr_accessor :took, :timed_out, :total_hits, :total_hits_relation
+    end
   end
 end

@@ -1,6 +1,8 @@
 require_relative("lib/example_client")
 require_relative("lib/example_client2")
 
+require "json"
+
 RSpec.describe ElasticMiniQuery do
   it "has a version number" do
     expect(ElasticMiniQuery::VERSION).not_to be nil
@@ -17,10 +19,23 @@ RSpec.describe ElasticMiniQuery do
   end
 end
 
-RSpec.describe ElasticMiniQuery::Query::Result::Raw do
+RSpec.describe ElasticMiniQuery::Query::Response do
+  let(:dummy_response) do
+    ElasticMiniQuery::Query::Response.new(raw_response_v71)
+  end
+
+  let(:raw_response_v71) do
+    File.open("spec/testdata/query_response_v71.json") do |j|
+      ElasticMiniQuery::Result::Raw.new(j.read)
+    end
+  end
+
   context "parsing raw result" do
     it "basic query" do
-      
+      res = dummy_response
+      expect(res.summary.took).to eq(13)
+      expect(res.summary.total_hits).to eq(40318)
+      expect(res.summary.timed_out).to be_falsey
     end
   end
 end
