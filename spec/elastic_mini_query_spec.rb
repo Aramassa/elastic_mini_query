@@ -47,32 +47,3 @@ RSpec.describe ElasticMiniQuery::Query::Response do
     end
   end
 end
-
-RSpec.describe ElasticMiniQuery::Result::Summary do
-  context "Attribute Method" do
-    let(:summary){
-      ElasticMiniQuery::Result::Summary.new
-    }
-
-    it "assign total_hits" do
-      summary.total_hits = 300
-
-      count = summary.total_hits
-      expect(count).to eq(300)
-    end
-
-    it "assign total_hits_relation" do 
-      summary.total_hits_relation = :eq
-
-      expect(summary.total_hits_relation).to eq(:eq)
-    end
-
-    it "assign timed_out" do
-      summary.timed_out = false
-      expect(summary.timed_out).to be_falsy
-
-      summary.timed_out = true
-      expect(summary.timed_out).to be_truthy
-    end
-  end
-end
