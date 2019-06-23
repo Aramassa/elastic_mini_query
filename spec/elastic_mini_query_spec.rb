@@ -66,7 +66,9 @@ RSpec.describe ElasticMiniQuery::Query::Response do
 
       expect(r.hits.count).to eq(5)
 
-      expect(a.aggs("by_day").first["doc_count"]).to eq(22)
+      item1 = a.aggs("by_day").first
+      expect(item1.doc_count).to eq(22)
+      expect(item1["USDJPY_max"]).to eq(107.335)
     end
   end
 end
