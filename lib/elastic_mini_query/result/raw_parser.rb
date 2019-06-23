@@ -21,6 +21,7 @@ module ElasticMiniQuery
         search.sources = sources
 
         agg = ElasticMiniQuery::Result::AggResult.new
+        agg.aggregations = aggregations
 
         return [summary, search, agg]
       end
@@ -47,6 +48,10 @@ module ElasticMiniQuery
 
       def sources
         @json["hits"]["hits"].map {|d| d["_source"]}
+      end
+
+      def aggregations
+        @json["aggregations"]
       end
     end
   end

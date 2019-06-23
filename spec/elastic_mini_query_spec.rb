@@ -56,11 +56,17 @@ RSpec.describe ElasticMiniQuery::Query::Response do
     it "basic aggregatino query" do
       res = agg1
       s = res.summary
+      a = res.aggs
+      r = res.search
 
-      expect(s.took).to eq(69)
+      expect(s.took).to eq(13)
       expect(s.total_hits).to eq(39595)
       expect(s.total_hits_relation).to eq("eq")
       expect(s.timed_out).to be_falsey
+
+      expect(r.hits.count).to eq(5)
+
+      expect(a.aggs("by_day").first["doc_count"]).to eq(22)
     end
   end
 end
