@@ -3,6 +3,12 @@ require_relative("lib/example_client2")
 
 require "json"
 
+def create_raw(filename)
+  File.open(filename) do |j|
+    ElasticMiniQuery::Result::Raw.new(j.read)
+  end
+end
+
 RSpec.describe ElasticMiniQuery do
   it "has a version number" do
     expect(ElasticMiniQuery::VERSION).not_to be nil
@@ -21,14 +27,15 @@ end
 
 RSpec.describe ElasticMiniQuery::Query::Response do
   let(:search1) do
-    ElasticMiniQuery::Query::Response.new(raw_response_v71)
+    ElasticMiniQuery::Query::Response.new(srch_response_v71)
   end
 
-  let(:raw_response_v71) do
-    File.open("spec/testdata/query_response_v71.json") do |j|
-      ElasticMiniQuery::Result::Raw.new(j.read)
-    end
+  let(:agg1) do 
+    ElasticMiniQuery::Query::Response.new(agg_response_v71)
   end
+
+  let(:srch_response_v71){ create_raw("spec/testdata/srch_response_v71.json") }
+  let(:agg_response_v71){ create_raw("spec/testdata/agg_response_v71.json") }
 
   context "parsing raw result" do
     it "basic search query" do
@@ -47,7 +54,13 @@ RSpec.describe ElasticMiniQuery::Query::Response do
     end
 
     it "basic aggregatino query" do
+      res = agg1
+      s = res.summary
 
+      expect(s.took).to eq(69)
+      expect(s.total_hits).to eq(39595)
+      expect(s.total_hits_relation).to eq("eq")
+      expect(s.timed_out).to be_falsey
     end
   end
 end
