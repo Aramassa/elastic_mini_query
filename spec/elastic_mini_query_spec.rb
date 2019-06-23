@@ -20,7 +20,7 @@ RSpec.describe ElasticMiniQuery do
 end
 
 RSpec.describe ElasticMiniQuery::Query::Response do
-  let(:dummy_response) do
+  let(:search1) do
     ElasticMiniQuery::Query::Response.new(raw_response_v71)
   end
 
@@ -31,8 +31,8 @@ RSpec.describe ElasticMiniQuery::Query::Response do
   end
 
   context "parsing raw result" do
-    it "basic query" do
-      res = dummy_response
+    it "basic search query" do
+      res = search1
       s = res.summary
 
       expect(s.took).to eq(13)
@@ -44,6 +44,10 @@ RSpec.describe ElasticMiniQuery::Query::Response do
       expect(r.hits.count).to eq(200)
       expect(r.hits.first["_id"]).to eq("201905210114")
       expect(r.sources.first["CADJPY_max"]).to eq("82.0265")
+    end
+
+    it "basic aggregatino query" do
+
     end
   end
 end
