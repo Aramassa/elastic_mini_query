@@ -3,9 +3,9 @@
 ## Initialize Query Class
 
 ```ruby
-class ElasticSimpleQuery < ElasticMiniQuery
-  es_host: "http://localhost:9200"
-  es_api_key: "some api key"
+class ElasticSimpleQuery < ElasticMiniQuery::Client::Base
+  elastic_mini_host "http://localhost:9200"
+  elastic_mini_api_key "some api key"
 
 end
 
