@@ -5,6 +5,7 @@ module ElasticMiniQuery
   module Query
     class Builder
       attr_reader :indice
+      attr_writer :size, :track_total_hits
       def initialize(indice: "*")
         @searches = []
         @aggs = []
@@ -20,7 +21,10 @@ module ElasticMiniQuery
       end
 
       def to_json
-        {}.to_json
+        {
+          size: @size,
+          track_total_hits: @track_total_hits
+        }.to_json
       end
     end
   end
