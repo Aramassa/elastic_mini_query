@@ -13,8 +13,12 @@ module ElasticMiniQuery::Client
         b = ElasticMiniQuery::Query::Builder.new
         yield b
 
-        ## TODO faraday request
-        b
+        res = http_post do |req|
+          req.url("/#{b.indice}/_search")
+          req.body = b.to_json
+        end
+
+        JSON.parse(res.body)
       end
       private :request
 

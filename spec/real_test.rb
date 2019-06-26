@@ -7,7 +7,7 @@ RSpec.describe RealClient do
   context "test" do
     it "test1" do
       hoge = RealClient.test
-      p hoge
+      pp hoge
     end
   end
 end

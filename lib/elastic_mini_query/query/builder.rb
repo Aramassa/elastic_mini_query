@@ -4,9 +4,12 @@ require_relative "search_builder"
 module ElasticMiniQuery
   module Query
     class Builder
-      def initialize
+      attr_reader :indice
+      def initialize(indice: "*")
         @searches = []
         @aggs = []
+
+        @indice = indice
       end
 
       def agg(type, name)
@@ -14,6 +17,10 @@ module ElasticMiniQuery
         @aggs << agg
 
         agg
+      end
+
+      def to_json
+        {}.to_json
       end
     end
   end
