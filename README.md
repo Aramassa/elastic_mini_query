@@ -42,6 +42,17 @@ Or with docker-compose(recommended)
 docker-compose -f docker-compose.yml -f docker-compose/rspec.yml run app
 ```
 
+#### Loading Sample Data
+
+* 7.x
+
+```sh
+docker-compose exec elasticsearch /es_scripts/7.x.start.sh
+```
+
+
+See: https://www.elastic.co/guide/en/kibana/7.1/tutorial-load-dataset.html
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/elastic_mini_query. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.

@@ -4,13 +4,13 @@ require_relative "search_builder"
 module ElasticMiniQuery
   module Query
     class Builder
-      attr_reader :indice
+      attr_accessor :indices
       attr_writer :size, :track_total_hits
-      def initialize(indice: "*")
+      def initialize
         @searches = []
         @aggs = []
 
-        @indice = indice
+        @indice = "*"
       end
 
       def agg(type, name)

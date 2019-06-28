@@ -24,7 +24,7 @@ module ElasticMiniQuery::Client
       yield b
 
       res = http_post do |req|
-        req.url("/#{b.indice}/_search")
+        req.url("/#{b.indices}/_search")
         req.body = b.to_json
       end
 

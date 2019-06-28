@@ -16,7 +16,7 @@ RSpec.describe RealClient do
       p c.size
 
       r.sources.each do |row|
-        p row["USDJPY_min"]
+        p (sprintf "test %s on %s", row["balance"], row["address"])
       end
     end
   end

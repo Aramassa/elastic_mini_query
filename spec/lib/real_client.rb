@@ -4,6 +4,7 @@ class RealClient < ElasticMiniQuery::Client::Base
 
   def test
     request do |builder|
+      builder.indices = "bank"
       builder.agg(:date_histgram, "by_date")
         .agg("USDJPY_avg", "USDJPY_min", [:avg])
     end
