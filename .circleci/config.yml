@@ -1,6 +1,10 @@
 # Use the latest 2.1 version of CircleCI pipeline processing engine, see https://circleci.com/docs/2.0/configuration-reference/
 version: 2.1
 
+notify:
+  webhooks:
+    - https://outlook.office.com/webhook/407f5d2c-7620-490d-951a-7e8a3a9b3625@d52f78ca-85da-4450-9941-ac3fee2b6af6/CircleCI/caf4aa29188c45a2a90ed07c3f79c8db/6bc44637-3745-44cb-8139-6a1269444b1e
+
 executors:
   base-rails:
     working_directory: /app
