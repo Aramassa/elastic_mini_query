@@ -17,6 +17,10 @@ module ElasticMiniQuery::Client
       @track_total_hits = true
     end
 
+    def debug!
+      @debug = true
+    end
+
     def request
       b = ElasticMiniQuery::Query::Builder.new
       b.size = size
@@ -24,8 +28,15 @@ module ElasticMiniQuery::Client
       yield b
 
       res = http_post do |req|
-        req.url("/#{b.indices}/_search")
-        req.body = b.to_json
+        url = "/#{b.indices}/_search"
+        body = b.to_json
+        req.url(url)
+        req.body = body
+
+        if @debug
+          puts url
+          puts body
+        end
       end
 
       ElasticMiniQuery::Query::Response.new(ElasticMiniQuery::Result::Raw.new(res.body))

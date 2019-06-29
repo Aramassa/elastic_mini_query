@@ -8,9 +8,14 @@ module ElasticMiniQuery
       attr_writer :size, :track_total_hits
       def initialize
         @searches = []
+        @query = nil
         @aggs = []
 
         @indice = "*"
+      end
+
+      def query
+        @query ||= ElasticMiniQuery::Query::SearchBuilder.new
       end
 
       def agg(type, name)
@@ -25,6 +30,11 @@ module ElasticMiniQuery
           size: @size,
           track_total_hits: @track_total_hits
         }
+
+        if @query
+          req[:query] = @query.to_json
+        end
+
 
         req.to_json
       end
