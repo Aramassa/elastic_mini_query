@@ -12,12 +12,12 @@ RSpec.describe RealClient do
       s = res.summary
       r = res.search
 
-      p s.total_hits
-      p c.size
+      expect(s.total_hits).to eq(1000)
+      expect(c.size).to eq(100)
 
-      r.sources.each do |row|
-        p (sprintf "test %s on %s", row["balance"], row["address"])
-      end
+      doc = r.sources.first
+      expect(doc["address"]).to eq("880 Holmes Lane")
+      expect(doc["balance"]).to eq(39225)
     end
   end
 end
