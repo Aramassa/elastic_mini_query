@@ -21,10 +21,12 @@ module ElasticMiniQuery
       end
 
       def to_json
-        {
+        req = {
           size: @size,
           track_total_hits: @track_total_hits
-        }.to_json
+        }
+
+        req.to_json
       end
     end
   end
