@@ -6,12 +6,17 @@ executors:
     working_directory: /app
     docker:
       - image: mosac/rails-start:2.6.3-rails5.2.3
+      - image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+        environment:
+          "discovery.type": "single-node"
 
 jobs:
   do-rspec:
     executor: base-rails
     steps:
       - checkout
+      - run: while ! nc -z localhost 9200; do sleep 0.1; done 
+      - run: /app/spec/es_scripts/7.x.start.sh
       - run: bundle install
       - run: bundle exec rspec
 
