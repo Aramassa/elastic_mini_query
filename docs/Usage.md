@@ -9,7 +9,7 @@ class ElasticSimpleQuery < ElasticMiniQuery::Client::Base
 
 end
 
-esq = ElasticSimpleQuery.new
+client = ElasticSimpleQuery.new
 ```
 
 ## Search
@@ -17,13 +17,31 @@ esq = ElasticSimpleQuery.new
 * all columns
 
 ```ruby
-esq.q("hello")
+client.match("word")
 ```
 
 * specify columns
 
 ```ruby
-esq.q("hello", columns: ["col_a", "col_b"])
+## Single
+client.match("word", :address)
+
+## Multiple
+client.match("word", [:address, :name])
+```
+
+* multiple words
+
+```ruby
+## Match any words
+client.match_any("word1 word2 word3")
+client.match_any(["word1" "word2" "word3"]) # array
+client.match_any("word1 word2 word3", :address) # specify column
+
+## Match all words
+client.match_all("word1 word2 word3")
+client.match_any(["word1" "word2" "word3"]) # array
+client.match_any("word1 word2 word3", :address) # specify column
 ```
 
 ## Aggregation
