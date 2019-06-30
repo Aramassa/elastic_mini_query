@@ -12,7 +12,7 @@ end
 client = ElasticSimpleQuery.new
 ```
 
-## Search
+## String Match
 
 * all columns
 
