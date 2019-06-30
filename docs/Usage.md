@@ -69,7 +69,7 @@ end
 ## fetch responses
 
 ```ruby
-res = esq.q("hello")
+res = esq.get_all_docs.execute
 res.docs.each do |row, info|
   # data processing
 end
