@@ -15,6 +15,13 @@ class RealClient < ElasticMiniQuery::Client::Base
     end
   end
 
+  def search_phrase(word, col=nil)
+    request do |builder|
+      builder.indices = "bank"
+      builder.query.match(word, col).match_phrase
+    end
+  end
+
   def search_by_address(word)
     request do |builder|
       builder.indices = "bank"

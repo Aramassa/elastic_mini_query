@@ -31,19 +31,19 @@ RSpec.describe RealClient do
 
     it "search all field" do
       res = client.search("Fulton")
-      s = res.summary
+      s   = res.summary
 
       expect(s.total_hits).to eq(3)
     end
 
     it "search by bank address" do
       res = client.search_by_address("Street")
-      s = res.summary
+      s   = res.summary
 
       expect(s.total_hits).to eq(385)
 
       res = client.search_by_address("Bristol")
-      s = res.summary
+      s   = res.summary
 
       expect(s.total_hits).to eq(1)
 
@@ -59,6 +59,24 @@ RSpec.describe RealClient do
 
       s = res.summary
       expect(s.total_hits).to eq(2)
+    end
+
+    context "match phrase" do
+      it "word search" do
+        res = client.search("Fulton Street")
+        s   = res.summary
+        expect(s.total_hits).to eq(385)
+      end
+
+      it "mutch phrase" do
+        res = client.search_phrase("Fulton Street")
+        s   = res.summary
+        expect(s.total_hits).to eq(1)
+
+        res = client.search_phrase("Bristol Street")
+        s   = res.summary
+        expect(s.total_hits).to eq(1)
+      end
     end
   end
 

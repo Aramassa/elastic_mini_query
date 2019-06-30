@@ -7,6 +7,12 @@ class ElasticSimpleQuery < ElasticMiniQuery::Client::Base
   elastic_mini_host "http://localhost:9200"
   elastic_mini_api_key "some api key"
 
+  ## request all data
+  def get_all_docs
+    request do |builder|
+      builder.indices = "bank"
+    end
+  end
 end
 
 client = ElasticSimpleQuery.new
@@ -17,31 +23,41 @@ client = ElasticSimpleQuery.new
 * all columns
 
 ```ruby
-client.match("word")
+request do |builder|
+  builder.indices = "bank"
+end
 ```
 
 * specify columns
 
 ```ruby
 ## Single
-client.match("word", :address)
+request do |builder|
+  builder.indices = "bank"
+  builder.query.match("word", :address)
+end
 
 ## Multiple
-client.match("word", [:address, :name])
+request do |builder|
+  builder.indices = "bank"
+  builder.query.match("word", [:address, :firstname])
+end
 ```
 
 * multiple words
 
 ```ruby
 ## Match any words
-client.match_any("word1 word2 word3")
-client.match_any(["word1" "word2" "word3"]) # array
-client.match_any("word1 word2 word3", :address) # specify column
+request do |builder|
+  builder.indices = "bank"
+  builder.query.match("word1 word2 word3").match_any
+end 
 
-## Match all words
-client.match_all("word1 word2 word3")
-client.match_any(["word1" "word2" "word3"]) # array
-client.match_any("word1 word2 word3", :address) # specify column
+## Phrase Match
+request do |builder|
+  builder.indices = "bank"
+  builder.query.match("word1 word2 word3").match_phrase
+end  
 ```
 
 ## Aggregation
