@@ -28,11 +28,4 @@ class RealClient < ElasticMiniQuery::Client::Base
       builder.query.match(word, :address)
     end
   end
-
-  def test_agg
-    request do |builder|
-      builder.agg(:date_histgram, "by_date")
-          .agg("USDJPY_avg", "USDJPY_min", [:avg])
-    end
-  end
 end
