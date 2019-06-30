@@ -43,13 +43,6 @@ module ElasticMiniQuery::Client
     end
     private :request
 
-    def build
-      b = ElasticMiniQuery::Query::Builder.new
-      yield b
-      b
-    end
-    private :build
-
     def agg(type, name)
       agg(type, name)
     end
