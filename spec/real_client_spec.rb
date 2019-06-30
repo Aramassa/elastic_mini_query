@@ -5,6 +5,8 @@ require "lib/real_client"
 
 RSpec.describe RealClient do
 
+  ##
+  # @return RealClient
   let!(:client) {
     RealClient.new
   }
@@ -35,7 +37,6 @@ RSpec.describe RealClient do
     end
 
     it "search by bank address" do
-      c = RealClient.new
       res = client.search_by_address("Street")
       s = res.summary
 
@@ -46,6 +47,18 @@ RSpec.describe RealClient do
 
       expect(s.total_hits).to eq(1)
 
+    end
+
+    it "multiple columns specified" do
+      res = client.search("Fulton", [:address])
+
+      s = res.summary
+      expect(s.total_hits).to eq(1)
+
+      res = client.search("Fulton", [:address, :firstname])
+
+      s = res.summary
+      expect(s.total_hits).to eq(2)
     end
   end
 

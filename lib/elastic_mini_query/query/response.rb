@@ -8,6 +8,8 @@ module ElasticMiniQuery
         @summary, @search, @aggs = @raw.parse
       end
 
+      ##
+      # @return ElasticMiniQuery::Result::Summary
       def summary
         @summary
       end

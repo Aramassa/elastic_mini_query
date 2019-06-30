@@ -8,10 +8,10 @@ class RealClient < ElasticMiniQuery::Client::Base
     end
   end
 
-  def search(word)
+  def search(word, col=nil)
     request do |builder|
       builder.indices = "bank"
-      builder.query.match(word)
+      builder.query.match(word, col)
     end
   end
 
