@@ -3,27 +3,27 @@ class RealClient < ElasticMiniQuery::Client::Base
   elastic_mini_api_key ENV['API_KEY']
 
   def get_all_docs
-    request do |builder|
+    build do |builder|
       builder.indices = "bank"
     end
   end
 
   def search(word, col=nil)
-    request do |builder|
+    build do |builder|
       builder.indices = "bank"
       builder.query.match(word, col)
     end
   end
 
   def search_phrase(word, col=nil)
-    request do |builder|
+    build do |builder|
       builder.indices = "bank"
       builder.query.match(word, col).match_phrase
     end
   end
 
   def search_by_address(word)
-    request do |builder|
+    build do |builder|
       builder.indices = "bank"
       builder.query.match(word, :address)
     end

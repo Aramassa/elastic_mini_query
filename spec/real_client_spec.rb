@@ -13,7 +13,7 @@ RSpec.describe RealClient do
 
   context "get all data" do
     it "get all data" do
-      res = client.get_all_docs
+      res = client.get_all_docs.execute
 
       s = res.summary
       r = res.search
@@ -30,19 +30,19 @@ RSpec.describe RealClient do
   context "String search" do
 
     it "search all field" do
-      res = client.search("Fulton")
+      res = client.search("Fulton").execute
       s   = res.summary
 
       expect(s.total_hits).to eq(3)
     end
 
     it "search by bank address" do
-      res = client.search_by_address("Street")
+      res = client.search_by_address("Street").execute
       s   = res.summary
 
       expect(s.total_hits).to eq(385)
 
-      res = client.search_by_address("Bristol")
+      res = client.search_by_address("Bristol").execute
       s   = res.summary
 
       expect(s.total_hits).to eq(1)
@@ -50,12 +50,12 @@ RSpec.describe RealClient do
     end
 
     it "multiple columns specified" do
-      res = client.search("Fulton", [:address])
+      res = client.search("Fulton", [:address]).execute
 
       s = res.summary
       expect(s.total_hits).to eq(1)
 
-      res = client.search("Fulton", [:address, :firstname])
+      res = client.search("Fulton", [:address, :firstname]).execute
 
       s = res.summary
       expect(s.total_hits).to eq(2)
@@ -63,17 +63,17 @@ RSpec.describe RealClient do
 
     context "match phrase" do
       it "word search" do
-        res = client.search("Fulton Street")
+        res = client.search("Fulton Street").execute
         s   = res.summary
         expect(s.total_hits).to eq(385)
       end
 
       it "mutch phrase" do
-        res = client.search_phrase("Fulton Street")
+        res = client.search_phrase("Fulton Street").execute
         s   = res.summary
         expect(s.total_hits).to eq(1)
 
-        res = client.search_phrase("Bristol Street")
+        res = client.search_phrase("Bristol Street").execute
         s   = res.summary
         expect(s.total_hits).to eq(1)
       end

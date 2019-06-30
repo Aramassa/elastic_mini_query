@@ -23,7 +23,7 @@ client = ElasticSimpleQuery.new
 * all columns
 
 ```ruby
-request do |builder|
+build do |builder|
   builder.indices = "bank"
 end
 ```
@@ -32,13 +32,13 @@ end
 
 ```ruby
 ## Single
-request do |builder|
+build do |builder|
   builder.indices = "bank"
   builder.query.match("word", :address)
 end
 
 ## Multiple
-request do |builder|
+build do |builder|
   builder.indices = "bank"
   builder.query.match("word", [:address, :firstname])
 end
@@ -48,13 +48,13 @@ end
 
 ```ruby
 ## Match any words
-request do |builder|
+build do |builder|
   builder.indices = "bank"
   builder.query.match("word1 word2 word3").match_any
 end 
 
 ## Phrase Match
-request do |builder|
+build do |builder|
   builder.indices = "bank"
   builder.query.match("word1 word2 word3").match_phrase
 end  
@@ -63,10 +63,7 @@ end
 ## Aggregation
 
 ```ruby
-esq.agg
-  .by_date(:day, format: 'YYYY-mm-dd')
-  .filter(...)
-  .agg("col_a", type: [:min, :max, :avg])
+# TBD
 ```
 
 ## fetch responses
