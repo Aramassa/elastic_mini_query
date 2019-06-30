@@ -1,5 +1,5 @@
 class RealClient < ElasticMiniQuery::Client::Base
-  elastic_mini_host ENV['ELASTIC_URL']
+  elastic_mini_host ENV['ELASTIC_URL'] || "http://localhost:9200"
   elastic_mini_api_key ENV['API_KEY']
 
   def get_all_docs
