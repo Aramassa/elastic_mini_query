@@ -1,8 +1,6 @@
 # ElasticMiniQuery
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/elastic_mini_query`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+TODO: Write concept.
 
 ## Installation
 
@@ -20,9 +18,22 @@ Or install it yourself as:
 
     $ gem install elastic_mini_query
 
+## Compatibility
+
+* elasticsearch version
+
+|elasticsearch version| |status|
+|---|---|---|
+|0.90|→|not implemented|
+|1.x|→|not implemented|
+|2.x|→|not implemented|
+|5.x|→|yet|
+|6.x|→|yet|
+|7.x|→|compatible|
+
 ## Usage
 
-TODO: Write usage instructions here
+Show [Usage.md](https://github.com/[USERNAME]/elastic_mini_query/blob/master/docs/Usage.md).
 
 ## Development
 
@@ -49,7 +60,6 @@ docker-compose -f docker-compose.yml -f docker-compose/rspec.yml run app
 ```sh
 docker-compose exec elasticsearch /es_scripts/7.x.start.sh
 ```
-
 
 See: https://www.elastic.co/guide/en/kibana/7.1/tutorial-load-dataset.html
 
