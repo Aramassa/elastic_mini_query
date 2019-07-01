@@ -28,4 +28,10 @@ class RealClient < ElasticMiniQuery::Client::Base
       builder.query.match(word, :address)
     end
   end
+
+  def empty_index
+    build do |builder|
+      builder.indices = "not-exists"
+    end
+  end
 end

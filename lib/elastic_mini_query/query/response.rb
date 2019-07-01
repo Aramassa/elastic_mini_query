@@ -5,7 +5,7 @@ module ElasticMiniQuery
     class Response
       def initialize(raw)
         @raw = raw
-        @summary, @search, @aggs = @raw.parse
+        @summary, @search, @aggs, @error = @raw.parse
       end
 
       ##
@@ -20,6 +20,14 @@ module ElasticMiniQuery
 
       def aggs
         @aggs
+      end
+
+      def error?
+        !@error.nil?
+      end
+
+      def error
+        @error
       end
     end
   end

@@ -52,7 +52,7 @@ module ElasticMiniQuery::Client
         @key = key
       end
 
-      def execute
+      def execute!
         res = http_post(@url, @key) do |req|
           url = "/#{@builder.indices}/_search"
           body = @builder.to_json
@@ -65,7 +65,19 @@ module ElasticMiniQuery::Client
           end
         end
 
+        unless res.status == 200
+          raise ElasticMiniQuery::ResponseError.new(res)
+        end
+
         ElasticMiniQuery::Query::Response.new(ElasticMiniQuery::Result::Raw.new(res.body))
+      end
+
+      def execute
+        begin
+          return execute!
+        rescue ElasticMiniQuery::ResponseError => e
+          return ElasticMiniQuery::Query::Response.new(ElasticMiniQuery::Result::Error.new(e.response.body))
+        end
       end
     end
   end
