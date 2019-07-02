@@ -1,22 +1,32 @@
 module ElasticMiniQuery
   module Query
     class AggBuilder
-      def initialize(type, name)
+      def initialize(type)
         @type = type
-        @name = name
+        @field = nil
+        @types = []
 
-        @aggs = []
+        @agg = {}
       end
 
-      def agg(field, as, types)
+      def agg(field, types)
         types = [types] unless types.is_a?(Array)
-        @aggs << {
-          field: field,
-          as: as,
-          types: types
-        }
+        @field = field
+        @types = types
 
         self
+      end
+
+      def kv(aggs)
+        @types.each do |type|
+          {
+            "#{@field}_#{type}": {
+              "#{type}": {
+                "field": @field
+              }
+            }
+          }
+        end
       end
     end
   end

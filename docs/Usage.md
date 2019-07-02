@@ -63,7 +63,10 @@ end
 ## Aggregation
 
 ```ruby
-# TBD
+build do |builder|
+  builder.indices = "bank"
+  builder.aggs.agg(:balance, [:max, :avg, :min])
+end
 ```
 
 ## fetch responses

@@ -34,4 +34,12 @@ class RealClient < ElasticMiniQuery::Client::Base
       builder.indices = "not-exists"
     end
   end
+
+  def agg_balance
+    build do |builder|
+      builder.indices= "bank"
+      builder.aggs.agg(:balance, [:min, :max])
+    end
+
+  end
 end

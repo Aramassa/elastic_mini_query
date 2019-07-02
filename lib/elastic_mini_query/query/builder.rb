@@ -18,8 +18,8 @@ module ElasticMiniQuery
         @query ||= ElasticMiniQuery::Query::SearchBuilder.new
       end
 
-      def agg(type, name)
-        agg = ElasticMiniQuery::Query::AggBuilder.new(type, name)
+      def aggs(type=nil)
+        agg = ElasticMiniQuery::Query::AggBuilder.new(type)
         @aggs << agg
 
         agg
@@ -33,6 +33,11 @@ module ElasticMiniQuery
 
         if @query
           req[:query] = @query.to_json
+        end
+
+        @aggs.each do |agg|
+          req[:aggs] ||= {}
+          agg.kv(req[:aggs])
         end
 
 
