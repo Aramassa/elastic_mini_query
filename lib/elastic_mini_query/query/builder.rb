@@ -40,7 +40,6 @@ module ElasticMiniQuery
           agg.kv(req[:aggs])
         end
 
-
         req.to_json
       end
     end

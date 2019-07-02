@@ -104,11 +104,13 @@ RSpec.describe RealClient do
   context "aggregation" do
     context "Metrics Aggregation" do
       it "min, max, avg" do
-        res = client.search("Street", [:address, :firstname]).agg_balance.execute
+        res = client.debug!.search("Street", [:address, :firstname]).agg_balance.execute
         s = res.summary
+        a = res.aggs
 
         expect(s.total_hits).to eq(385)
-
+        expect(a["balance_min"]).to eq(1031.0)
+        expect(a["balance_max"]).to eq(49795.0)
       end
     end
     it "summary_by" do

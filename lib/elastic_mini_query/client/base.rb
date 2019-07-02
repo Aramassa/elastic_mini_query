@@ -27,6 +27,7 @@ module ElasticMiniQuery::Client
 
     def debug!
       @debug = true
+      self
     end
 
     def execute

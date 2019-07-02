@@ -3,7 +3,21 @@ require "elastic_mini_query/result/agg_item"
 module ElasticMiniQuery::Result
   class AggResult
 
-    attr_accessor :aggregations
+    def initialize(aggs)
+      @metrics = {}
+      return if aggs.nil?
+      @aggs = aggs
+
+      @aggs.each do |k, v|
+        if @aggs[k]["value"]
+          @metrics[k] = @aggs[k]["value"]
+        end
+      end
+    end
+
+    def [](key)
+      @metrics[key]
+    end
 
     def aggs(bucket)
       return @items if @items

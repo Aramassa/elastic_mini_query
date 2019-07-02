@@ -19,11 +19,9 @@ module ElasticMiniQuery
 
       def kv(aggs)
         @types.each do |type|
-          {
-            "#{@field}_#{type}": {
-              "#{type}": {
-                "field": @field
-              }
+          aggs["#{@field}_#{type}"] = {
+            "#{type}": {
+              "field": @field
             }
           }
         end

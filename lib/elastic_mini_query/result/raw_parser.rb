@@ -20,8 +20,7 @@ module ElasticMiniQuery
         search.hits = hits
         search.sources = sources
 
-        agg = ElasticMiniQuery::Result::AggResult.new
-        agg.aggregations = aggregations
+        agg = ElasticMiniQuery::Result::AggResult.new(aggregations)
 
         return [summary, search, agg]
       end
