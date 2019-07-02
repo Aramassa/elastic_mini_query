@@ -29,19 +29,23 @@ module ElasticMiniQuery::Client
       @debug = true
     end
 
-    def build
-      b = ElasticMiniQuery::Query::Builder.new
-      b.size = size
-      b.track_total_hits = track_total_hits
-      yield b
+    def execute
+      Requester.new(@b, self.class.elastic_mini_host, self.class.elastic_mini_api_key).execute
+    end
 
-      Requester.new(b, self.class.elastic_mini_host, self.class.elastic_mini_api_key)
+    def execute!
+      Requester.new(@b, self.class.elastic_mini_host, self.class.elastic_mini_api_key).execute!
+    end
+
+    def build
+      @b ||= ElasticMiniQuery::Query::Builder.new
+      @b.size = size
+      @b.track_total_hits = track_total_hits
+      yield @b
+
+      self
     end
     private :build
-
-    def agg(type, name)
-      agg(type, name)
-    end
 
     class Requester
       include ::ElasticMiniQuery::Client::HttpMethods
