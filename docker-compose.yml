@@ -6,7 +6,7 @@ services:
     env_file:
       - .docker-env
     entrypoint: ""
-    command:  /bin/sh -c "bundle install && while true; do echo hello world; sleep 10; done"
+    command:  /bin/sh -c "gem install rspec-core:3.8.1 rspec:3.8.0 && bundle install && while true; do echo hello world; sleep 10; done"
     depends_on: 
       - elasticsearch
     volumes:
