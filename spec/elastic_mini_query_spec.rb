@@ -1,70 +1,137 @@
-require_relative("lib/example_client")
-require_relative("lib/example_client2")
+require "bundler/setup"
+require "elastic_mini_query"
 
-require "json"
+require "lib/real_client"
 
-def create_raw(filename)
-  File.open(filename) do |j|
-    ElasticMiniQuery::Result::Raw.new(j.read)
-  end
-end
+RSpec.describe RealClient do
 
-RSpec.describe ElasticMiniQuery do
-  it "has a version number" do
-    expect(ElasticMiniQuery::VERSION).not_to be nil
-  end
+  ##
+  # @return RealClient
+  let!(:client) {
+    RealClient.new
+  }
 
-  context "Setting" do
-    it "initialize parameters" do
-      client1 = ExampleClient.new
-      client2 = ExampleClient2.new
-  
-      expect(client1.class.elastic_mini_host).to eq("http://localhost:9200")
-      expect(client2.class.elastic_mini_host).to eq("http://localhost:9201")
-    end
-  end
-end
-
-RSpec.describe ElasticMiniQuery::Query::Response do
-  let(:search1) do
-    ElasticMiniQuery::Query::Response.new(srch_response_v71)
-  end
-
-  let(:agg1) do 
-    ElasticMiniQuery::Query::Response.new(agg_response_v71)
-  end
-
-  let(:srch_response_v71){ create_raw("spec/testdata/srch_response_v71.json") }
-  let(:agg_response_v71){ create_raw("spec/testdata/agg_response_v71.json") }
-
-  context "parsing raw result" do
-    it "basic search query" do
-      res = search1
-      s = res.summary
-
-      expect(s.took).to eq(13)
-      expect(s.total_hits).to eq(40318)
-      expect(s.total_hits_relation).to eq("eq")
-      expect(s.timed_out).to be_falsey
-
-      r = res.search
-      expect(r.hits.count).to eq(200)
-      expect(r.hits.first["_id"]).to eq("201905210114")
-      expect(r.sources.first["CADJPY_max"]).to eq("82.0265")
+  context "indice not exists" do
+    context "raise exception" do
+      it "indice not exists" do
+        expect{client.empty_index.execute!}.to raise_error(ElasticMiniQuery::ResponseError)
+      end
     end
 
-    it "basic aggregatino query" do
-      res = agg1
+    context "not raise exception" do
+      it "indice not exists" do
+        res = client.empty_index.execute
+
+        expect(res.error?).to eq(true)
+        s = res.summary
+        expect(s.total_hits).to eq(0)
+
+        expect(res.error.reason).to eq("no such index [not-exists]")
+        expect(res.error.type).to eq("index_not_found_exception")
+      end
+    end
+  end
+
+  context "get all data" do
+    it "get all data" do
+      res = client.get_all_docs.execute
+
       s = res.summary
-      a = res.aggs
       r = res.search
 
-      expect(s.took).to eq(13)
-      expect(s.total_hits).to eq(39595)
-      expect(s.total_hits_relation).to eq("eq")
-      expect(s.timed_out).to be_falsey
+      expect(s.total_hits).to eq(1000)
+      expect(client.size).to eq(100)
 
-      expect(r.hits.count).to eq(5)
+      doc = r.sources.first
+      expect(doc["address"]).to eq("880 Holmes Lane")
+      expect(doc["balance"]).to eq(39225)
+    end
+  end
+
+  context "String search" do
+
+    it "search all field" do
+      res = client.search("Fulton").execute
+      s   = res.summary
+
+      expect(s.total_hits).to eq(3)
+    end
+
+    it "search by bank address" do
+      res = client.search_by_address("Street").execute
+      s   = res.summary
+
+      expect(s.total_hits).to eq(385)
+
+      res = client.search_by_address("Bristol").execute
+      s   = res.summary
+
+      expect(s.total_hits).to eq(1)
+
+    end
+
+    it "multiple columns specified" do
+      res = client.search("Fulton", [:address]).execute
+
+      s = res.summary
+      expect(s.total_hits).to eq(1)
+
+      res = client.search("Fulton", [:address, :firstname]).execute
+
+      s = res.summary
+      expect(s.total_hits).to eq(2)
+    end
+
+    context "match phrase" do
+      it "word search" do
+        res = client.search("Fulton Street").execute
+        s   = res.summary
+        expect(s.total_hits).to eq(385)
+      end
+
+      it "mutch phrase" do
+        res = client.search_phrase("Fulton Street").execute
+        s   = res.summary
+        expect(s.total_hits).to eq(1)
+
+        res = client.search_phrase("Bristol Street").execute
+        s   = res.summary
+        expect(s.total_hits).to eq(1)
+      end
+    end
+  end
+
+  context "aggregation" do
+    context "Metrics Aggregation" do
+      it "min, max, avg" do
+        res = client.search("Street", [:address, :firstname]).agg_balance.execute
+        s = res.summary
+        a = res.aggs
+
+        expect(s.total_hits).to eq(385)
+        expect(a["aggs"]["balance_min"]).to eq(1031.0)
+        expect(a["aggs"]["balance_max"]).to eq(49795.0)
+      end
+    end
+    it "summary_by" do
+
+    end
+
+    context "date_histgram" do
+      it "logstash-*" do
+        res = client.agg_by_date.execute
+        s = res.summary
+        a = res.aggs
+
+        expect(a["memory_by_date"].first["memory_max"]).to eq(397480.0)
+        expect(a["memory_by_date"].first["memory_min"]).to eq(0.0)
+        expect(a["memory_by_date"].first["memory_avg"]).to eq(201708.0)
+
+        expect(a["memory_by_date"].last["memory_max"]).to eq(392800.0)
+        expect(a["memory_by_date"].last["memory_min"]).to eq(0.0)
+        expect(a["memory_by_date"].last["memory_avg"]).to eq(192077.31343283583)
+      end
+
     end
   end
 end

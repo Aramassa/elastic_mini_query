@@ -21,7 +21,7 @@ module ElasticMiniQuery
         search.hits = []
         search.sources = []
 
-        agg = ElasticMiniQuery::Result::AggResult.new(nil)
+        agg = ElasticMiniQuery::Result::AggResult.new(nil, nil)
 
         @type = @json["error"]["type"]
         @reason = @json["error"]["reason"]

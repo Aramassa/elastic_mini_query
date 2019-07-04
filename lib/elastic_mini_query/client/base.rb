@@ -2,6 +2,8 @@ require_relative "http_methods"
 
 module ElasticMiniQuery::Client
   class Base
+    attr_accessor :size, :track_total_hits
+
     class << self
       def elastic_mini_es_version(version)
         @version = version
@@ -18,8 +20,6 @@ module ElasticMiniQuery::Client
       end
     end
 
-    attr_accessor :size, :track_total_hits
-
     def initialize
       @size = 100
       @track_total_hits = true
@@ -31,11 +31,11 @@ module ElasticMiniQuery::Client
     end
 
     def execute
-      Requester.new(@b, self.class.elastic_mini_host, self.class.elastic_mini_api_key).execute
+      Requester.new(@b, self.class.elastic_mini_host, self.class.elastic_mini_api_key).execute(@debug)
     end
 
     def execute!
-      Requester.new(@b, self.class.elastic_mini_host, self.class.elastic_mini_api_key).execute!
+      Requester.new(@b, self.class.elastic_mini_host, self.class.elastic_mini_api_key).execute!(@debug)
     end
 
     def build
@@ -57,14 +57,14 @@ module ElasticMiniQuery::Client
         @key = key
       end
 
-      def execute!
+      def execute!(debug)
         res = http_post(@url, @key) do |req|
           url = "/#{@builder.indices}/_search"
           body = @builder.to_json
           req.url(url)
           req.body = body
 
-          if @debug
+          if debug
             puts url
             puts body
           end
@@ -74,14 +74,14 @@ module ElasticMiniQuery::Client
           raise ElasticMiniQuery::ResponseError.new(res)
         end
 
-        ElasticMiniQuery::Query::Response.new(ElasticMiniQuery::Result::Raw.new(res.body))
+        ElasticMiniQuery::Query::Response.new(ElasticMiniQuery::Result::Raw.new(res.body, @builder.parser_keys))
       end
 
-      def execute
+      def execute(debug)
         begin
-          return execute!
+          return execute!(debug)
         rescue ElasticMiniQuery::ResponseError => e
-          return ElasticMiniQuery::Query::Response.new(ElasticMiniQuery::Result::Error.new(e.response.body))
+          return ElasticMiniQuery::Query::Response.new(ElasticMiniQuery::Result::Error.new(e.response.body, nil))
         end
       end
     end

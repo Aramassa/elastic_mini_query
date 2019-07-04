@@ -25,6 +25,10 @@ module ElasticMiniQuery
         agg
       end
 
+      def parser_keys
+        @aggs.map(&:parser_keys).to_h
+      end
+
       def to_json
         req = {
           size: @size,

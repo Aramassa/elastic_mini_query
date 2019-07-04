@@ -7,7 +7,7 @@ module ElasticMiniQuery
         @dialector = ElasticMiniQuery::Result::RawDialectBase.dialector(version)
       end
 
-      def parse(response)
+      def parse(response, parser_keys)
         @json = JSON.parse(response)
 
         summary = ElasticMiniQuery::Result::Summary.new
@@ -20,7 +20,7 @@ module ElasticMiniQuery
         search.hits = hits
         search.sources = sources
 
-        agg = ElasticMiniQuery::Result::AggResult.new(aggregations)
+        agg = ElasticMiniQuery::Result::AggResult.new(aggregations, parser_keys)
 
         return [summary, search, agg]
       end

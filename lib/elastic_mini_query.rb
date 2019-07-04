@@ -18,7 +18,7 @@ module ElasticMiniQuery
     attr_reader :response, :error
     def initialize(response)
       @response = response
-      @error = ElasticMiniQuery::Result::Error.new(response.body)
+      @error = ElasticMiniQuery::Result::Error.new(response.body, nil)
     end
   end
 end
