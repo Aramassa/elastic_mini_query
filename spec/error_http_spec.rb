@@ -3,7 +3,7 @@ require "elastic_mini_query"
 
 require "lib/real_client"
 
-RSpec.describe ElasticMiniQuery::Error do
+RSpec.describe "Error caused by network" do
 
   ##
   # @return RealClient

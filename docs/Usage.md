@@ -62,10 +62,24 @@ end
 
 ## Aggregation
 
+### Metric Aggregations
+
 ```ruby
 build do |builder|
   builder.indices = "bank"
   builder.aggs.agg(:balance, [:max, :avg, :min])
+end
+```
+
+### Bucket Aggregations
+
+#### Date Histogram
+
+```ruby
+build do |builder|
+  builder.indices = "bank"
+  builder.aggs.agg(:balance, [:max, :avg, :min])
+    .date_histogram("@timestamp", :day, order: :desc, format: 'yyyy-MM-dd')
 end
 ```
 

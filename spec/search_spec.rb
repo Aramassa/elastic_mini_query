@@ -3,7 +3,7 @@ require "elastic_mini_query"
 
 require "lib/real_client"
 
-RSpec.describe ElasticMiniQuery::Query::SearchBuilder do
+RSpec.describe "Searcy Queries" do
 
   ##
   # @return RealClient

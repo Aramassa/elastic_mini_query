@@ -18,13 +18,29 @@ module ElasticMiniQuery
         self
       end
 
-      def date_histgram(field, interval, order: :asc)
+      ##
+      # @see https://www.elastic.co/guide/en/elasticsearch/reference/7.1/search-aggregations-bucket-datehistogram-aggregation.html
+      #
+      # @param field [String]
+      # @param interval [Symbol]
+      # @param order [Symbol]
+      # @param format [String]
+      #
+      def date_histgram(field, interval, order: :asc, format: nil)
+        format = case interval
+                   when !format.nil?
+                   when :year then "yyyy"
+                   when :month then "yyyy-MM"
+                   when :day then "yyyy-MM-dd"
+                   when :hour then "yyyy-MM-dd-hh"
+                 end
         @date_histogram = {
           field: field,
           interval: interval
         }
 
-        @date_histogram[:order] = {_key: order}if order
+        @date_histogram[:order] = {_key: order} if order
+        @date_histogram[:format] = format if format
       end
 
       def parser_keys
