@@ -31,22 +31,27 @@ Or install it yourself as:
 |6.x|→|yet|
 |7.x|→|compatible|
 
-## ElasticSearch Functions
+## Basic Usage
 
-## Usage
+### Search and Aggregation
 
 Show [Usage.md](https://github.com/[USERNAME]/elastic_mini_query/blob/master/docs/Usage.md).
 
+## Supported ElasticSearch functionss
+
 ### Search
 
-|Search Type|Supported|Syntax|
+See [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/7.1/search.html)
+See [ElasticSaerch](https://www.elastic.co/guide/en/elasticsearch/reference/7.1/query-dsl.html)
+
+|Search Type|Supported|Since|
 |---|---|---|
 
 ### Metric Aggregation
 
 See [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/7.1/search-aggregations-metrics.html)
 
-|Aggragation Type|Supported|Syntax|
+|Aggragation Type|Supported|Since|
 |---|---|---|
 |avg|Yes|0.1.0|
 |min|Yes|0.1.0|
