@@ -31,9 +31,39 @@ Or install it yourself as:
 |6.x|→|yet|
 |7.x|→|compatible|
 
+## ElasticSearch Functions
+
 ## Usage
 
 Show [Usage.md](https://github.com/[USERNAME]/elastic_mini_query/blob/master/docs/Usage.md).
+
+### Search
+
+|Search Type|Supported|Syntax|
+|---|---|---|
+
+### Metric Aggregation
+
+See [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/7.1/search-aggregations-metrics.html)
+
+|Aggragation Type|Supported|Syntax|
+|---|---|---|
+|avg|Yes|0.1.0|
+|min|Yes|0.1.0|
+|max|Yes|0.1.0|
+
+### Bucket Aggregation
+
+See [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/7.1/search-aggregations-bucket.html)
+
+|Aggragation Type|Supported|Since|
+|---|---|---|
+|Date Histogram|Yes|0.1.0|
+|Filter|in progress|0.1.0|  
+|Filters|in progress|0.1.0|  
+|Date Range|Yes|0.1.0|  
+|Histogram|Yes|0.1.0|  
+
 
 ## Development
 
