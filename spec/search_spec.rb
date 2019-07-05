@@ -3,34 +3,13 @@ require "elastic_mini_query"
 
 require "lib/real_client"
 
-RSpec.describe RealClient do
+RSpec.describe ElasticMiniQuery::Query::SearchBuilder do
 
   ##
   # @return RealClient
   let!(:client) {
     RealClient.new
   }
-
-  context "indice not exists" do
-    context "raise exception" do
-      it "indice not exists" do
-        expect{client.empty_index.execute!}.to raise_error(ElasticMiniQuery::ResponseError)
-      end
-    end
-
-    context "not raise exception" do
-      it "indice not exists" do
-        res = client.empty_index.execute
-
-        expect(res.error?).to eq(true)
-        s = res.summary
-        expect(s.total_hits).to eq(0)
-
-        expect(res.error.reason).to eq("no such index [not-exists]")
-        expect(res.error.type).to eq("index_not_found_exception")
-      end
-    end
-  end
 
   context "get all data" do
     it "get all data" do
@@ -98,40 +77,6 @@ RSpec.describe RealClient do
         s   = res.summary
         expect(s.total_hits).to eq(1)
       end
-    end
-  end
-
-  context "aggregation" do
-    context "Metrics Aggregation" do
-      it "min, max, avg" do
-        res = client.search("Street", [:address, :firstname]).agg_balance.execute
-        s = res.summary
-        a = res.aggs
-
-        expect(s.total_hits).to eq(385)
-        expect(a["aggs"]["balance_min"]).to eq(1031.0)
-        expect(a["aggs"]["balance_max"]).to eq(49795.0)
-      end
-    end
-    it "summary_by" do
-
-    end
-
-    context "date_histgram" do
-      it "logstash-*" do
-        res = client.agg_by_date.execute
-        s = res.summary
-        a = res.aggs
-
-        expect(a["memory_by_date"].first["memory_max"]).to eq(397480.0)
-        expect(a["memory_by_date"].first["memory_min"]).to eq(0.0)
-        expect(a["memory_by_date"].first["memory_avg"]).to eq(201708.0)
-
-        expect(a["memory_by_date"].last["memory_max"]).to eq(392800.0)
-        expect(a["memory_by_date"].last["memory_min"]).to eq(0.0)
-        expect(a["memory_by_date"].last["memory_avg"]).to eq(192077.31343283583)
-      end
-
     end
   end
 end
