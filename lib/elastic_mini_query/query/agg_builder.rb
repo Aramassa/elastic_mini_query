@@ -26,7 +26,7 @@ module ElasticMiniQuery
       # @param order [Symbol]
       # @param format [String]
       #
-      def date_histgram(field, interval, order: :asc, format: nil)
+      def date_histogram(field, interval, order: :asc, format: nil)
         format = case interval
                    when !format.nil?
                    when :year then "yyyy"
