@@ -1,3 +1,4 @@
+require "date"
 require "bundler/setup"
 require "elastic_mini_query"
 
@@ -76,6 +77,27 @@ RSpec.describe "Searcy Queries" do
         res = client.search_phrase("Bristol Street").execute
         s   = res.summary
         expect(s.total_hits).to eq(1)
+      end
+    end
+  end
+
+  context "range search" do
+    context "date" do
+      it "@timestamp" do
+        d1 = DateTime.parse("2015-05-18").to_date
+        d2 = DateTime.now.to_date
+        d_diff = (d2 - d1).to_i
+
+        res = client.debug!.date_range("@timestamp", term_lte: "now-#{d_diff}d/d", term_gte: "now-#{d_diff+10}d/d").execute
+        s = res.summary
+        r = res.search
+
+
+        # r.sources.each do |row|
+        #   p row
+        # end
+        expect(s.total_hits).to eq(9255)
+
       end
     end
   end

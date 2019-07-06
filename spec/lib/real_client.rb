@@ -29,6 +29,14 @@ class RealClient < ElasticMiniQuery::Client::Base
     end
   end
 
+  def date_range(field, term_gte: nil, term_lte: nil)
+    build do |builder|
+      builder.indices = "logstash-*"
+      builder.query.date_range(field, term_gte: term_gte, term_lte: term_lte)
+    end
+
+  end
+
   def empty_index
     build do |builder|
       builder.indices = "not-exists"

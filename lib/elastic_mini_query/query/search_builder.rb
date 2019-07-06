@@ -6,6 +6,20 @@ module ElasticMiniQuery
         @multi_match
         @any_word = true
         @phrase_match = false
+
+        @date_range = nil
+      end
+
+      ##
+      # @param field [String]
+      # @param str [String]
+      #   ex: "now-120d/d"
+      def date_range(field, term_gte: nil, term_lte: nil)
+        @date_range = {}
+        @date_range["#{field}"] = {}
+
+        @date_range["#{field}"][:gte] = term_gte if term_gte
+        @date_range["#{field}"][:lte] = term_lte if term_lte
       end
 
       def match(word, col = nil)
@@ -49,6 +63,7 @@ module ElasticMiniQuery
         query[:match]       = @match if @match
         query[:multi_match] = @multi_match if @multi_match
 
+        query[:range] = @date_range if @date_range
         query
       end
     end

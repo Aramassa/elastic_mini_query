@@ -16,7 +16,7 @@ RSpec.describe "Aggregate with Bucket" do
 
       shared_examples "interval_spec" do |interval|
         it "interval #{interval}" do
-          res = client.debug!.agg_by_date(interval: interval).execute
+          res = client.agg_by_date(interval: interval).execute
           s = res.summary
           a = res.aggs
 
@@ -35,7 +35,6 @@ RSpec.describe "Aggregate with Bucket" do
 
           a["memory_by_date"].each_with_index do |v, k|
             if v["memory_max"]
-              p k
               break
             end
           end
