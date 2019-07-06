@@ -19,7 +19,8 @@ jobs:
     executor: base-rails
     steps:
       - checkout
-      - run: while ! nc -z localhost 9200; do sleep 0.1; done 
+      - run: while ! nc -z localhost 9200; do sleep 0.1; done
+      - run: curl http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=300s
       - run: bundle install
       - run: bundle exec rspec
 
