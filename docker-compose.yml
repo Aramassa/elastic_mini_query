@@ -13,11 +13,7 @@ services:
       - ./:/app
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
-    environment: 
-      "discovery.type": "single-node"
+    image: aramassa/elastic_mini_query_test:7.1.1
     ports:
       - 9200:9200
       - 9300:9300
-    volumes:
-      - ./spec/es_scripts:/es_scripts
