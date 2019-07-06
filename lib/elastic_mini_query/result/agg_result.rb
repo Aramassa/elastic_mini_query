@@ -16,7 +16,7 @@ module ElasticMiniQuery::Result
 
     def val(aggs, keys)
       keys.map do |k|
-        v = if aggs[k].is_a?(Hash) && aggs[k]["value"]
+        v = if aggs[k].is_a?(Hash) && aggs[k].has_key?("value")
               aggs[k]["value"]
             else
               aggs[k]
