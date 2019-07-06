@@ -32,7 +32,8 @@ module ElasticMiniQuery
                    when :year then "yyyy"
                    when :month then "yyyy-MM"
                    when :day then "yyyy-MM-dd"
-                   when :hour then "yyyy-MM-dd-hh"
+                   when :hour then "yyyy-MM-dd-HH"
+                   when :minute then "yyyy-MM-dd-HH-mm"
                  end
         @date_histogram = {
           field: field,
