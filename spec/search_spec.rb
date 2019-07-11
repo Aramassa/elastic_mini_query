@@ -88,7 +88,7 @@ RSpec.describe "Searcy Queries" do
         d2 = DateTime.now.to_date
         d_diff = (d2 - d1).to_i
 
-        res = client.debug!.date_range("@timestamp", term_lte: "now-#{d_diff}d/d", term_gte: "now-#{d_diff+10}d/d").execute
+        res = client.date_range("@timestamp", term_lte: "now-#{d_diff}d/d", term_gte: "now-#{d_diff+10}d/d").execute
         s = res.summary
         r = res.search
 

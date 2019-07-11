@@ -51,10 +51,10 @@ class RealClient < ElasticMiniQuery::Client::Base
 
   end
 
-  def agg_by_date(order: :desc, interval: :day)
+  def agg_by_date(order: :desc, interval: :day, timezone: nil)
     build do |builder|
       builder.indices= "logstash-*"
-      builder.aggs.agg(:memory, [:min, :max, :avg]).date_histogram("@timestamp", interval, order: order)
+      builder.aggs.agg(:memory, [:min, :max, :avg]).date_histogram("@timestamp", interval, order: order, timezone: timezone)
     end
   end
 end

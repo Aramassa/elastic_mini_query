@@ -14,9 +14,10 @@ RSpec.describe "Aggregate with Bucket" do
   context "date_histgram" do
     context "logstash-*" do
 
-      shared_examples "interval_spec" do |interval|
+      shared_examples "interval_spec" do |interval, timezone: nil|
         it "interval #{interval}" do
-          res = client.agg_by_date(interval: interval).execute
+          q = client.agg_by_date(interval: interval, timezone: timezone)
+          res = q.execute
           s = res.summary
           a = res.aggs
 
@@ -96,6 +97,20 @@ RSpec.describe "Aggregate with Bucket" do
           let(:last_max){331480.0}
           let(:last_min){5040.0}
           let(:last_avg){148752.0}
+        end
+
+        it_behaves_like "interval_spec", :minute, timezone: "+09:00" do
+          let(:idx_one){89}
+          let(:idx_two){670}
+          let(:hits){14005}
+          let(:size){4281}
+          let(:first_key){"2015-05-21-07-00"}
+          let(:first_max){160800.0}
+          let(:first_min){160800.0}
+          let(:first_avg){160800.0}
+          let(:last_max){312520.0}
+          let(:last_min){312520.0}
+          let(:last_avg){312520.0}
         end
 
         it_behaves_like "interval_spec", :minute do

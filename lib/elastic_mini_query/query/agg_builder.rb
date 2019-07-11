@@ -8,6 +8,8 @@ module ElasticMiniQuery
         @types = []
 
         @agg = {}
+
+        @timezone_offset = nil
       end
 
       def agg(field, types)
@@ -26,7 +28,7 @@ module ElasticMiniQuery
       # @param order [Symbol]
       # @param format [String]
       #
-      def date_histogram(field, interval, order: :asc, format: nil)
+      def date_histogram(field, interval, order: :asc, format: nil, timezone: nil)
         format = case interval
                    when !format.nil?
                    when :year then "yyyy"
@@ -42,6 +44,7 @@ module ElasticMiniQuery
 
         @date_histogram[:order] = {_key: order} if order
         @date_histogram[:format] = format if format
+        @date_histogram[:time_zone] = timezone if timezone
       end
 
       def parser_keys
@@ -63,7 +66,14 @@ module ElasticMiniQuery
           when @date_histogram
             aggs["#{@field}_by_date"] = {
               "date_histogram": @date_histogram,
-              aggs: (@types.map{|type| ["#{@field}_#{type}", {"#{type}": {field: @field}}] }).to_h
+              aggs: (@types.map do |type|
+                ary = [
+                  "#{@field}_#{type}",
+                  {"#{type}": {field: @field}}
+                ]
+                ary << {time_zone: @timezone_offset} if @timezone_offset
+                ary
+              end.to_h)
             }
           else
             @types.each do |type|
