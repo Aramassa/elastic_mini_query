@@ -83,6 +83,13 @@ build do |builder|
 end
 ```
 
+* options
+
+|Option|Description|Type|Value|
+|---|---|---|---|
+|timezone|set timezone offset for "key_as_string"|String|"+09:00"|
+|order| |Symbol|:desc / :asc |
+
 ## fetch responses
 
 ```ruby
