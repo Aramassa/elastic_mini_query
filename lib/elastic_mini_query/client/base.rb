@@ -48,6 +48,33 @@ module ElasticMiniQuery::Client
     end
     private :build
 
+    def poster(indice, type)
+      ElasticMiniQuery::Client::Base::IndicePoster.new(self.class.elastic_mini_host, self.class.elastic_mini_api_key, indice, type)
+    end
+
+    class IndicePoster
+      include ::ElasticMiniQuery::Client::HttpMethods
+
+      def initialize(url, key, indice, type)
+        @client = self.class.faraday_client(url)
+        @indice = indice
+        @type = type
+        @key = key
+      end
+
+      def post!(id, doc)
+        @client.post do |req|
+          req.headers['Content-Type'] = 'application/json'
+          req.headers['Authorization'] = "ApiKey #{@key}"
+
+          url = "/#{@indice}/#{@type}/#{id}"
+          body = doc.to_json
+          req.url(url)
+          req.body = body
+        end
+      end
+    end
+
     class Requester
       include ::ElasticMiniQuery::Client::HttpMethods
 
