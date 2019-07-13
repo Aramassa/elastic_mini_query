@@ -18,9 +18,25 @@ end
 client = ElasticSimpleQuery.new
 ```
 
-## Create Index
+## Create Index / Mapping / Templaste
+
+|Operation|Compatibility|
+|---|---|
+|Mapping|URL Only (Body not compatible)|
+|Template|URL Only (Body not compatible)|
+|POST to Index|Nothing|
 
 ### Mapping
+
+```ruby
+poster.mapping!({
+  properties: {
+    "name": {
+      type: "keyword"
+    }
+  }
+})
+```
 
 ### Template
 
