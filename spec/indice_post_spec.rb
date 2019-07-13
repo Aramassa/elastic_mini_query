@@ -10,7 +10,10 @@ RSpec.describe "Indice Post / Mapping" do
   }
 
   let!(:poster) {
-    client.poster("example", "default")
+    poster = client.poster("example", "default")
+    poster.empty_index!
+
+    poster
   }
 
   describe "Mapping" do
@@ -81,8 +84,12 @@ RSpec.describe "Indice Post / Mapping" do
   describe "Indice" do
     context "Post" do
 
+      it "create empty index" do
+        client.poster("example#{Time.now.to_i}", "default")
+      end
+
       it "add indice" do
-        (1000...1200).each do |id|
+        (100...120).each do |id|
           poster.post!(id, {
             name: "test_#{id}",
             email: "test#{id}@test.com",

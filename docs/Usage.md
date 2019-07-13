@@ -18,6 +18,20 @@ end
 client = ElasticSimpleQuery.new
 ```
 
+## Create Index
+
+### Mapping
+
+### Template
+
+### Indice
+
+* create empty index
+
+```ruby
+poster.empty_index!
+````
+
 ## String Match
 
 * all columns
