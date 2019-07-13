@@ -75,7 +75,7 @@ module ElasticMiniQuery::Client
       end
 
       def empty_index!
-        @client.post do |req|
+        @client.put do |req|
           req.headers['Content-Type'] = 'application/json'
           req.headers['Authorization'] = "ApiKey #{@key}"
 

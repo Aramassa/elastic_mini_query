@@ -11,7 +11,9 @@ RSpec.describe "Indice Post / Mapping" do
 
   let!(:poster) {
     poster = client.poster("example", "default")
-    poster.empty_index!
+    res = poster.empty_index!
+
+    p res
 
     poster
   }
@@ -85,7 +87,8 @@ RSpec.describe "Indice Post / Mapping" do
     context "Post" do
 
       it "create empty index" do
-        client.poster("example#{Time.now.to_i}", "default")
+        res = client.poster("example#{Time.now.to_i}", "default").empty_index!
+        expect(res.status).to eq(200)
       end
 
       it "add indice" do
