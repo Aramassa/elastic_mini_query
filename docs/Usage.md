@@ -40,6 +40,20 @@ poster.mapping!({
 
 ### Template
 
+```ruby
+poster.templaste!("example-tpl", ["example-*", "sample-*"], {
+  "name": {
+    type: "keyword"
+  },
+  "host_name": {
+   "type": "keyword"
+  }
+}, order: 30)
+```
+
+* options
+  * order : adapt priority
+
 ### Indice
 
 * create empty index

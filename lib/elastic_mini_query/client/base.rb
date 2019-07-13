@@ -85,6 +85,24 @@ module ElasticMiniQuery::Client
         end
       end
 
+      def template!(name, patterns, properties, order: nil)
+        @client.put do |req|
+          req.headers['Content-Type'] = 'application/json'
+          req.headers['Authorization'] = "ApiKey #{@key}"
+
+          url = "/_template/#{name}"
+          body = {
+            "index_patterns": patterns,
+            "mappings": {
+              "properties": properties
+            }
+          }
+          body[:order] = order if order
+          req.url(url)
+          req.body = body.to_json
+        end
+      end
+
       def post!(id, doc)
         @client.post do |req|
           req.headers['Content-Type'] = 'application/json'

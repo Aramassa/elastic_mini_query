@@ -16,6 +16,21 @@ RSpec.describe "Indice Post / Mapping" do
     poster
   }
 
+  describe "Templaste" do
+    context "Create" do
+      it "for example template" do
+        poster.template!("example-tpl", ["example-*", "sample-*"], {
+          "name": {
+            type: "keyword"
+          },
+          "host_name": {
+            "type": "keyword"
+          }
+        }, order: 30)
+      end
+    end
+  end
+
   describe "Mapping" do
     context "Register" do
       it "for example indices" do
@@ -85,7 +100,7 @@ RSpec.describe "Indice Post / Mapping" do
     context "Post" do
 
       it "create empty index" do
-        res = client.poster("example#{Time.now.to_i}", "default").empty_index!
+        res = client.poster("example-#{Time.now.to_i}", "default").empty_index!
         expect(res.status).to eq(200)
       end
 
