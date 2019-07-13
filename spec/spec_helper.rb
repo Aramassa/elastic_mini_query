@@ -1,6 +1,10 @@
 require "bundler/setup"
 require "elastic_mini_query"
 
+require "timecop"
+
+require "lib/helper"
+
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"
@@ -14,3 +18,6 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+t = Time.utc(2019, 7, 14, 18, 30, 0)
+Timecop.freeze(t)

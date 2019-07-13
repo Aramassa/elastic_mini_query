@@ -84,8 +84,8 @@ RSpec.describe "Searcy Queries" do
   context "range search" do
     context "date" do
       it "@timestamp" do
-        d1 = DateTime.parse("2015-05-18").to_date
-        d2 = DateTime.now.to_date
+        d1 = Time.utc(2015, 5, 18).to_date
+        d2 = Time.now.to_date
         d_diff = (d2 - d1).to_i
 
         res = client.date_range("@timestamp", term_lte: "now-#{d_diff}d/d", term_gte: "now-#{d_diff+10}d/d").execute
@@ -96,7 +96,7 @@ RSpec.describe "Searcy Queries" do
         # r.sources.each do |row|
         #   p row
         # end
-        expect(s.total_hits).to eq(9255)
+        expect(s.total_hits).to eq(4631)
 
       end
     end
