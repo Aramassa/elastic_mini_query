@@ -82,9 +82,25 @@ RSpec.describe "Indice Post / Mapping" do
     context "Post" do
 
       it "add indice" do
-        poster.post!("12345", {
-          test: 'hello!!'
-        })
+        (1000...1200).each do |id|
+          poster.post!(id, {
+            name: "test_#{id}",
+            email: "test#{id}@test.com",
+            age: 5 + (id % 15),
+            married: !!(((id / 3) % 2) == 0),
+            gender: !!(((id / 7) % 2) == 0) ? "male" : "female",
+            body_weight: 50 + (id / 30.0),
+            created_at: Time.now.to_i,
+            introduction: case id % 5
+                            when 0
+                              "Are you OK?, You alright?, or Alright mate?"
+                            when 1, 2
+                              "Good morning, Good afternoon, or Good evening"
+                            else
+                              "Hello. my name is Elastic!!"
+                          end
+          })
+        end
       end
     end
   end
