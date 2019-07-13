@@ -96,7 +96,7 @@ RSpec.describe "Searcy Queries" do
         # r.sources.each do |row|
         #   p row
         # end
-        expect(s.total_hits).to eq(4631)
+        expect(s.total_hits).to eq(9255)
 
       end
     end
