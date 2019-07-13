@@ -13,8 +13,6 @@ RSpec.describe "Indice Post / Mapping" do
     poster = client.poster("example", "default")
     res = poster.empty_index!
 
-    p res
-
     poster
   }
 
