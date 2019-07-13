@@ -1,10 +1,10 @@
 require "lib/real_client"
 
 client = RealClient.new
-poster = client.poster("user", "default")
+poster = client.poster("user-001", "default")
 res = poster.empty_index!
 
-poster.template!("example-tpl", ["example-*", "sample-*"], {
+poster.template!("example-tpl", ["user-*", "sample-*"], {
   "name": {
     type: "keyword"
   },
@@ -59,8 +59,8 @@ properties = {
 
 poster.mapping!(properties)
 
-(100...120).each do |id|
-  poster.post!(id, {
+(1000...1200).each do |id|
+  res = poster.post!(id, {
     name: "test_#{id}",
     email: "test#{id}@test.com",
     age: 5 + (id % 15),

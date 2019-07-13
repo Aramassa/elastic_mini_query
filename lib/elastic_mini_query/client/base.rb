@@ -109,6 +109,7 @@ module ElasticMiniQuery::Client
           req.headers['Authorization'] = "ApiKey #{@key}"
 
           url = "/#{@indice}/#{@type}/#{id}"
+          url = @dialector.indice_url(@indice, @type, id)
           body = doc.to_json
           req.url(url)
           req.body = body
