@@ -100,7 +100,6 @@ RSpec.describe "Indice Post / Mapping" do
     context "Post" do
 
       it "create empty index" do
-        p Time.now
         res = client.poster("example-#{Time.now.to_i}", "default").empty_index!
       end
 
