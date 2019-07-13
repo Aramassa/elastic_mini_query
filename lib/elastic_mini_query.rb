@@ -19,6 +19,7 @@ module ElasticMiniQuery
     def initialize(response)
       @response = response
       @error = ElasticMiniQuery::Result::Error.new(response.body, nil)
+      @error.parse
     end
   end
 end

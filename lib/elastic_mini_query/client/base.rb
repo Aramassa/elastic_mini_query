@@ -1,4 +1,6 @@
 require_relative "http_methods"
+require_relative "request_dialect_v00"
+require_relative "request_dialect_v68"
 
 module ElasticMiniQuery::Client
   class Base
@@ -6,7 +8,7 @@ module ElasticMiniQuery::Client
 
     class << self
       def elastic_mini_es_version(version)
-        @version = version
+        @version = Gem::Version.create(version)
       end
 
       def elastic_mini_host(host=nil)
@@ -17,6 +19,15 @@ module ElasticMiniQuery::Client
       def elastic_mini_api_key(key=nil)
         @key = key unless key.nil?
         @key
+      end
+
+      def request_dialector
+        case
+          when @version < Gem::Version.create("7.0")
+            RequestDialectV68.new
+          else
+            RequestDialectV00.new
+        end
       end
     end
 
@@ -49,13 +60,14 @@ module ElasticMiniQuery::Client
     private :build
 
     def poster(indice, type)
-      ElasticMiniQuery::Client::Base::IndicePoster.new(self.class.elastic_mini_host, self.class.elastic_mini_api_key, indice, type)
+      ElasticMiniQuery::Client::Base::IndicePoster.new(self.class.request_dialector, self.class.elastic_mini_host, self.class.elastic_mini_api_key, indice, type)
     end
 
     class IndicePoster
       include ::ElasticMiniQuery::Client::HttpMethods
 
-      def initialize(url, key, indice, type)
+      def initialize(dialector, url, key, indice, type)
+        @dialector = dialector
         @client = self.class.faraday_client(url)
         @indice = indice
         @type = type
@@ -71,6 +83,28 @@ module ElasticMiniQuery::Client
           body = doc.to_json
           req.url(url)
           req.body = body
+        end
+      end
+
+      def mapping!(mapping)
+        res = @client.put do |req|
+          req.headers['Content-Type'] = 'application/json'
+          req.headers['Authorization'] = "ApiKey #{@key}"
+
+          url = @dialector.mapping_url(@indice, @type)
+          body = mapping.to_json
+          req.url(url)
+          req.body = body
+        end
+
+        raise ElasticMiniQuery::ResponseError.new(res) unless res.status == 200
+      end
+
+      def mapping(mapping)
+        begin
+          mapping!(mapping)
+        rescue => e
+          return ElasticMiniQuery::Query::Response.new(ElasticMiniQuery::Result::Error.new(e.response.body, nil))
         end
       end
     end

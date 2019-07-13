@@ -1,4 +1,5 @@
 class RealClient < ElasticMiniQuery::Client::Base
+  elastic_mini_es_version "7.1"
   elastic_mini_host ENV['ELASTIC_URL'] || "http://localhost:9200"
   elastic_mini_api_key ENV['API_KEY']
 

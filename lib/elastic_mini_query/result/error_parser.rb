@@ -23,8 +23,14 @@ module ElasticMiniQuery
 
         agg = ElasticMiniQuery::Result::AggResult.new(nil, nil)
 
-        @type = @json["error"]["type"]
-        @reason = @json["error"]["reason"]
+        if(@json["error"] && @json["error"]["root_cause"])
+          root_cause = @json["error"]["root_cause"].first
+          @type = root_cause["type"]
+          @reason = root_cause["reason"]
+        else
+          @type = @json["error"]["type"]
+          @reason = @json["error"]["reason"]
+        end
 
         return [summary, search, agg]
       end
