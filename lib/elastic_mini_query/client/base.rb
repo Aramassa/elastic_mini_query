@@ -128,11 +128,13 @@ module ElasticMiniQuery::Client
         end
 
         raise ElasticMiniQuery::ResponseError.new(res) unless res.status == 200
+
+        return res
       end
 
       def mapping(mapping)
         begin
-          mapping!(mapping)
+          return mapping!(mapping)
         rescue => e
           return ElasticMiniQuery::Query::Response.new(ElasticMiniQuery::Result::Error.new(e.response.body, nil))
         end
