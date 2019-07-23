@@ -14,13 +14,13 @@ RSpec.describe "Aggregation for Metric" do
   context "aggregation" do
     context "Metrics Aggregation" do
       it "min, max, avg" do
-        res = client.search("Street", [:address, :firstname]).agg_balance.execute
+        res = client.search("Good morning", [:introduction, :hobby]).agg_balance.execute
         s = res.summary
         a = res.aggs
 
-        expect(s.total_hits).to eq(385)
-        expect(a["aggs"]["balance_min"]).to eq(1031.0)
-        expect(a["aggs"]["balance_max"]).to eq(49795.0)
+        expect(s.total_hits).to eq(99)
+        expect(a["aggs"]["age_min"]).to eq(6.0)
+        expect(a["aggs"]["age_max"]).to eq(8.0)
       end
     end
   end

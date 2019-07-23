@@ -19,64 +19,68 @@ RSpec.describe "Searcy Queries" do
       s = res.summary
       r = res.search
 
-      expect(s.total_hits).to eq(1000)
+      expect(s.total_hits).to eq(500)
       expect(client.size).to eq(100)
 
       doc = r.sources.first
-      expect(doc["address"]).to eq("880 Holmes Lane")
-      expect(doc["balance"]).to eq(39225)
+      expect(doc["name"]).to eq("name1000 test1000")
+      expect(doc["age"]).to eq(15)
     end
   end
 
   context "String search" do
 
     it "search all field" do
-      res = client.search("Fulton").execute
+      res = client.search("Are you OK?").execute
       s   = res.summary
 
-      expect(s.total_hits).to eq(3)
+      expect(s.total_hits).to eq(33)
     end
 
     it "search by bank address" do
-      res = client.search_by_address("Street").execute
+      res = client.search_by_hobby("baseball").execute
       s   = res.summary
 
-      expect(s.total_hits).to eq(385)
+      expect(s.total_hits).to eq(360)
 
-      res = client.search_by_address("Bristol").execute
+      res = client.search_by_hobby("piano").execute
       s   = res.summary
 
-      expect(s.total_hits).to eq(1)
+      expect(s.total_hits).to eq(28)
 
     end
 
     it "multiple columns specified" do
-      res = client.search("Fulton", [:address]).execute
+      res = client.search("bad", [:history, :introduction]).execute
 
       s = res.summary
-      expect(s.total_hits).to eq(1)
+      expect(s.total_hits).to eq(285)
 
-      res = client.search("Fulton", [:address, :firstname]).execute
+      res = client.search("Good", [:history, :introduction]).execute
 
       s = res.summary
-      expect(s.total_hits).to eq(2)
+      expect(s.total_hits).to eq(156)
     end
 
     context "match phrase" do
       it "word search" do
-        res = client.search("Fulton Street").execute
+        res = client.search("normal").execute
         s   = res.summary
-        expect(s.total_hits).to eq(385)
+        expect(s.total_hits).to eq(71)
       end
 
-      it "mutch phrase" do
-        res = client.search_phrase("Fulton Street").execute
+      it "match phrase" do
+        res = client.search_phrase("Elastic").execute
         s   = res.summary
-        expect(s.total_hits).to eq(1)
+        expect(s.total_hits).to eq(368)
 
-        res = client.search_phrase("Bristol Street").execute
+        res = client.search_phrase("football swim").execute
         s   = res.summary
-        expect(s.total_hits).to eq(1)
+        expect(s.total_hits).to eq(56)
+
+        res = client.search_phrase("football").execute
+        s   = res.summary
+        expect(s.total_hits).to eq(84)
       end
     end
   end
@@ -88,7 +92,7 @@ RSpec.describe "Searcy Queries" do
         d2 = Time.now.to_date
         d_diff = (d2 - d1).to_i
 
-        res = client.date_range("@timestamp", term_lte: "now-#{d_diff}d/d", term_gte: "now-#{d_diff+10}d/d").execute
+        res = client.date_range("created_at", term_lte: "now", term_gte: "now-#{d_diff+10}d/d").execute
         s = res.summary
         r = res.search
 
@@ -96,7 +100,7 @@ RSpec.describe "Searcy Queries" do
         # r.sources.each do |row|
         #   p row
         # end
-        expect(s.total_hits).to eq(9255)
+        expect(s.total_hits).to eq(500)
 
       end
     end

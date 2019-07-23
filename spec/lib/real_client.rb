@@ -5,34 +5,34 @@ class RealClient < ElasticMiniQuery::Client::Base
 
   def get_all_docs
     build do |builder|
-      builder.indices = "bank"
+      builder.indices = "user-*"
     end
   end
 
   def search(word, col=nil)
     build do |builder|
-      builder.indices = "bank"
+      builder.indices = "user-*"
       builder.query.match(word, col)
     end
   end
 
   def search_phrase(word, col=nil)
     build do |builder|
-      builder.indices = "bank"
+      builder.indices = "user-*"
       builder.query.match(word, col).match_phrase
     end
   end
 
-  def search_by_address(word)
+  def search_by_hobby(word)
     build do |builder|
-      builder.indices = "bank"
-      builder.query.match(word, :address)
+      builder.indices = "user-*"
+      builder.query.match(word, :hobby)
     end
   end
 
   def date_range(field, term_gte: nil, term_lte: nil)
     build do |builder|
-      builder.indices = "logstash-*"
+      builder.indices = "user-*"
       builder.query.date_range(field, term_gte: term_gte, term_lte: term_lte)
     end
 
@@ -46,16 +46,16 @@ class RealClient < ElasticMiniQuery::Client::Base
 
   def agg_balance
     build do |builder|
-      builder.indices= "bank"
-      builder.aggs.agg(:balance, [:min, :max])
+      builder.indices= "user-*"
+      builder.aggs.agg(:age, [:min, :max, :avg])
     end
 
   end
 
   def agg_by_date(order: :desc, interval: :day, timezone: nil)
     build do |builder|
-      builder.indices= "logstash-*"
-      builder.aggs.agg(:memory, [:min, :max, :avg]).date_histogram("@timestamp", interval, order: order, timezone: timezone)
+      builder.indices= "user-*"
+      builder.aggs.agg(:body_weight, [:min, :max, :avg]).date_histogram("birthday", interval, order: order, timezone: timezone)
     end
   end
 end
