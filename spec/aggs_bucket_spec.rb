@@ -25,8 +25,6 @@ RSpec.describe "Aggregate with Bucket" do
           a["body_weight_by_date"].each_with_index do |v, k|
             next if k == 0
             if v["body_weight_min"]
-              p v
-              p k
               break
             end
           end
