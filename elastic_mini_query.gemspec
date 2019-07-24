@@ -6,7 +6,7 @@ require "elastic_mini_query/version"
 Gem::Specification.new do |spec|
   spec.name          = "elastic_mini_query"
   spec.version       = ElasticMiniQuery::VERSION
-  spec.authors       = ["Mosack"]
+  spec.authors       = ["Aramassa"]
   spec.email         = [""]
 
   spec.summary       = %q{Elastic Search Simple aggregation/search Query library}
