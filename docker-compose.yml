@@ -1,11 +1,19 @@
 version: "3"
 services: 
   app:
-    image: "mosac/rails-start:2.6.3-rails5.2.3"
+    image: mosac/rails-start:2.6.3-rails5.2.3
     working_dir: /app
     env_file:
       - .docker-env
     entrypoint: ""
-    command: "/bin/bash"
+    command:  /bin/sh -c "gem install rspec-core:3.8.1 rspec:3.8.0 && bundle install && while true; do echo hello world; sleep 10; done"
+    depends_on: 
+      - elasticsearch
     volumes:
       - ./:/app
+
+  elasticsearch:
+    image: aramassa/elastic_mini_query_test:7.1.1
+    ports:
+      - 9200:9200
+      - 9300:9300
