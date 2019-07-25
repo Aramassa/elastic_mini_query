@@ -85,6 +85,17 @@ module ElasticMiniQuery::Client
         end
       end
 
+      def delete_index!
+        @client.delete do |req|
+          req.headers['Content-Type'] = 'application/json'
+          req.headers['Authorization'] = "ApiKey #{@key}"
+
+          url = "/#{@indice}"
+          req.url(url)
+          req.body = {}.to_json
+        end
+      end
+
       def template!(name, patterns, properties, order: nil)
         @client.put do |req|
           req.headers['Content-Type'] = 'application/json'
