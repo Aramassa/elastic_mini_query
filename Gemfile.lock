@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    elastic_mini_query (0.1.0alpha)
+    elastic_mini_query (0.1.0alpha1)
       faraday (~> 0.15.0, >= 0.10.0)
 
 GEM

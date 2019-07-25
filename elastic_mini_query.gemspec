@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Elastic Search Simple aggregation/search Query library}
   spec.description   = %q{}
-  spec.homepage      = "https://github.com/Mosac/elastic_mini_query"
+  spec.homepage      = "https://github.com/Aramassa/elastic_mini_query"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
