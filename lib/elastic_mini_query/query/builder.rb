@@ -29,11 +29,17 @@ module ElasticMiniQuery
         @aggs.map(&:parser_keys).to_h
       end
 
+      def sort_by(sort)
+        @sort = sort
+      end
+
       def to_json
         req = {
           size: @size,
           track_total_hits: @track_total_hits
         }
+
+        req[:sort] = @sort if @sort
 
         if @query
           req[:query] = @query.to_json

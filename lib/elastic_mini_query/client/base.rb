@@ -42,11 +42,19 @@ module ElasticMiniQuery::Client
     end
 
     def execute
+      @b.sort_by(@sort)
       Requester.new(@b, self.class.elastic_mini_host, self.class.elastic_mini_api_key).execute(@debug)
     end
 
     def execute!
+      @b.sort_by(@sort)
       Requester.new(@b, self.class.elastic_mini_host, self.class.elastic_mini_api_key).execute!(@debug)
+    end
+
+    def sort_by(sort)
+      @sort = sort
+
+      self
     end
 
     def build

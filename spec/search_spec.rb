@@ -14,7 +14,7 @@ RSpec.describe "Searcy Queries" do
 
   context "get all data" do
     it "get all data" do
-      res = client.get_all_docs.execute
+      res = client.get_all_docs.sort_by(_id: :asc).execute
 
       s = res.summary
       r = res.search
