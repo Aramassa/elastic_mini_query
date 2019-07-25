@@ -74,6 +74,16 @@ module ElasticMiniQuery::Client
         @key = key
       end
 
+      def sync
+        @sync = true
+        yield
+        @sync = false
+      end
+
+      def sync?
+        !!@sync
+      end
+
       def empty_index!
         @client.put do |req|
           req.headers['Content-Type'] = 'application/json'
@@ -119,8 +129,8 @@ module ElasticMiniQuery::Client
           req.headers['Content-Type'] = 'application/json'
           req.headers['Authorization'] = "ApiKey #{@key}"
 
-          url = "/#{@indice}/#{@type}/#{id}"
           url = @dialector.indice_url(@indice, @type, id)
+          url += "?refresh" if sync?
           body = doc.to_json
           req.url(url)
           req.body = body
