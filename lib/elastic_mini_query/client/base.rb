@@ -82,6 +82,24 @@ module ElasticMiniQuery::Client
         @key = key
       end
 
+      def refresh(indice_pattern=nil)
+        yield if block_given?
+        refresh!(indice_pattern)
+      end
+
+      def refresh!(indice_pattern=nil)
+        @client.post do |req|
+          req.headers['Content-Type'] = 'application/json'
+          req.headers['Authorization'] = "ApiKey #{@key}"
+
+          url = ""
+          url = "/#{indice_pattern}" if indice_pattern
+          url += "/_refresh"
+          req.url(url)
+          req.body = {}.to_json
+        end
+      end
+
       def sync
         @sync = true
         yield

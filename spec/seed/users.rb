@@ -67,7 +67,7 @@ properties = {
 
 poster.mapping!(properties)
 
-poster.sync do
+poster.refresh do
   (1000...1500).each do |id|
     res = poster.post!(id, {
       name:         "name#{id} test#{id}",
