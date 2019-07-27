@@ -89,7 +89,6 @@ module ElasticMiniQuery::Client
 
       def refresh!(indice_pattern=nil)
         @client.post do |req|
-          req.headers['Content-Type'] = 'application/json'
           req.headers['Authorization'] = "ApiKey #{@key}"
 
           url = ""
@@ -112,7 +111,6 @@ module ElasticMiniQuery::Client
 
       def empty_index!
         @client.put do |req|
-          req.headers['Content-Type'] = 'application/json'
           req.headers['Authorization'] = "ApiKey #{@key}"
 
           url = "/#{@indice}"
@@ -123,7 +121,6 @@ module ElasticMiniQuery::Client
 
       def delete_index!
         @client.delete do |req|
-          req.headers['Content-Type'] = 'application/json'
           req.headers['Authorization'] = "ApiKey #{@key}"
 
           url = "/#{@indice}"
@@ -134,7 +131,6 @@ module ElasticMiniQuery::Client
 
       def template!(name, patterns, properties, order: nil)
         @client.put do |req|
-          req.headers['Content-Type'] = 'application/json'
           req.headers['Authorization'] = "ApiKey #{@key}"
 
           url = "/_template/#{name}"
@@ -152,7 +148,6 @@ module ElasticMiniQuery::Client
 
       def post!(id, doc)
         @client.post do |req|
-          req.headers['Content-Type'] = 'application/json'
           req.headers['Authorization'] = "ApiKey #{@key}"
 
           url = @dialector.indice_url(@indice, @type, id)
@@ -165,7 +160,6 @@ module ElasticMiniQuery::Client
 
       def mapping!(mapping)
         res = @client.put do |req|
-          req.headers['Content-Type'] = 'application/json'
           req.headers['Authorization'] = "ApiKey #{@key}"
 
           url = @dialector.mapping_url(@indice, @type)
