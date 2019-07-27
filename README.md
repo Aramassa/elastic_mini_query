@@ -78,6 +78,14 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ### Test
 
+Loading test data
+
+```sh
+docker-compose run app bundle exec rake spec:data:prepare
+```
+
+#### Execute
+
 ```sh
 bundle exec rspec
 ```
@@ -86,14 +94,6 @@ Or with docker-compose(recommended)
 
 ```sh
 docker-compose -f docker-compose.yml -f docker-compose/rspec.yml run app
-```
-
-#### Loading Sample Data
-
-* 7.x
-
-```sh
-docker-compose exec elasticsearch /es_scripts/7.x.start.sh
 ```
 
 See: https://www.elastic.co/guide/en/kibana/7.1/tutorial-load-dataset.html
