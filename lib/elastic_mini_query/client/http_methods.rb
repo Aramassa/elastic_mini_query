@@ -3,9 +3,10 @@ require "faraday"
 module ElasticMiniQuery::Client
   module HttpMethods
     module ClassMethods
-      def faraday_client(url, headders: {})
-        headders['Content-Type'] = 'application/json'
-        Faraday.new(url: url, headers: headders) do |conn|
+      def faraday_client(url, key: nil, headers: {})
+        headers['Content-Type'] = 'application/json'
+        headers['Authorization'] = "ApiKey #{key}" if key
+        Faraday.new(url: url, headers: headers) do |conn|
           conn.adapter :net_http
         end
       end
@@ -16,9 +17,7 @@ module ElasticMiniQuery::Client
     end
 
     def http_post(url, key)
-      res = self.class.faraday_client(url).post do |req|
-        req.headers['Authorization'] = "ApiKey #{key}"
-  
+      res = self.class.faraday_client(url, key: key).post do |req|
         yield req
       end
     end

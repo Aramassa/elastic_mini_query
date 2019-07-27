@@ -76,10 +76,9 @@ module ElasticMiniQuery::Client
 
       def initialize(dialector, url, key, indice, type)
         @dialector = dialector
-        @client = self.class.faraday_client(url)
+        @client = self.class.faraday_client(url, key: key)
         @indice = indice
         @type = type
-        @key = key
       end
 
       def refresh(indice_pattern=nil)
@@ -89,8 +88,6 @@ module ElasticMiniQuery::Client
 
       def refresh!(indice_pattern=nil)
         @client.post do |req|
-          req.headers['Authorization'] = "ApiKey #{@key}"
-
           url = ""
           url = "/#{indice_pattern}" if indice_pattern
           url += "/_refresh"
@@ -111,8 +108,6 @@ module ElasticMiniQuery::Client
 
       def empty_index!
         @client.put do |req|
-          req.headers['Authorization'] = "ApiKey #{@key}"
-
           url = "/#{@indice}"
           req.url(url)
           req.body = {}.to_json
@@ -121,8 +116,6 @@ module ElasticMiniQuery::Client
 
       def delete_index!
         @client.delete do |req|
-          req.headers['Authorization'] = "ApiKey #{@key}"
-
           url = "/#{@indice}"
           req.url(url)
           req.body = {}.to_json
@@ -131,8 +124,6 @@ module ElasticMiniQuery::Client
 
       def template!(name, patterns, properties, order: nil)
         @client.put do |req|
-          req.headers['Authorization'] = "ApiKey #{@key}"
-
           url = "/_template/#{name}"
           body = {
             "index_patterns": patterns,
@@ -148,8 +139,6 @@ module ElasticMiniQuery::Client
 
       def post!(id, doc)
         @client.post do |req|
-          req.headers['Authorization'] = "ApiKey #{@key}"
-
           url = @dialector.indice_url(@indice, @type, id)
           url += "?refresh" if sync?
           body = doc.to_json
@@ -160,8 +149,6 @@ module ElasticMiniQuery::Client
 
       def mapping!(mapping)
         res = @client.put do |req|
-          req.headers['Authorization'] = "ApiKey #{@key}"
-
           url = @dialector.mapping_url(@indice, @type)
           body = mapping.to_json
           req.url(url)
