@@ -1,4 +1,4 @@
-require "lib/real_client"
+require_relative "../lib/real_client"
 require "date"
 
 client = RealClient.new
