@@ -62,6 +62,12 @@ poster.templaste!("example-tpl", ["example-*", "sample-*"], {
 poster.empty_index!
 ````
 
+* delete_index
+
+```ruby
+poster.delete_index!
+```
+
 ## String Match
 
 * all columns
