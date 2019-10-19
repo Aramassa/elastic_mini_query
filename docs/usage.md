@@ -191,3 +191,9 @@ class SearchResult
 aggregation_result = res.aggs
 class AggResult
 ```
+
+## help your implementation
+
+```ruby
+res.help!
+```
