@@ -9,7 +9,7 @@ class ElasticSimpleQuery < ElasticMiniQuery::Client::Base
 
   ## request all data
   def get_all_docs
-    request do |builder|
+    build do |builder|
       builder.indices = "bank"
     end
   end
@@ -62,6 +62,12 @@ poster.templaste!("example-tpl", ["example-*", "sample-*"], {
 poster.empty_index!
 ````
 
+* delete_index
+
+```ruby
+poster.delete_index!
+```
+
 ## String Match
 
 * all columns
@@ -102,6 +108,15 @@ build do |builder|
   builder.indices = "bank"
   builder.query.match("word1 word2 word3").match_phrase
 end  
+```
+
+### Sort
+
+```ruby
+q = ElasticSimpleQuery.new
+q.get_all.sort_by(_id: :asc)
+q.get_all.sort_by(_id: :asc, age: :desc)
+
 ```
 
 ## Aggregation

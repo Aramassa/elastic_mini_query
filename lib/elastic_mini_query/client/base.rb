@@ -42,11 +42,19 @@ module ElasticMiniQuery::Client
     end
 
     def execute
+      @b.sort_by(@sort)
       Requester.new(@b, self.class.elastic_mini_host, self.class.elastic_mini_api_key).execute(@debug)
     end
 
     def execute!
+      @b.sort_by(@sort)
       Requester.new(@b, self.class.elastic_mini_host, self.class.elastic_mini_api_key).execute!(@debug)
+    end
+
+    def sort_by(sort)
+      @sort = sort
+
+      self
     end
 
     def build
@@ -68,17 +76,46 @@ module ElasticMiniQuery::Client
 
       def initialize(dialector, url, key, indice, type)
         @dialector = dialector
-        @client = self.class.faraday_client(url)
+        @client = self.class.faraday_client(url, key: key)
         @indice = indice
         @type = type
-        @key = key
+      end
+
+      def refresh(indice_pattern=nil)
+        yield if block_given?
+        refresh!(indice_pattern)
+      end
+
+      def refresh!(indice_pattern=nil)
+        @client.post do |req|
+          url = ""
+          url = "/#{indice_pattern}" if indice_pattern
+          url += "/_refresh"
+          req.url(url)
+          req.body = {}.to_json
+        end
+      end
+
+      def sync
+        @sync = true
+        yield
+        @sync = false
+      end
+
+      def sync?
+        !!@sync
       end
 
       def empty_index!
         @client.put do |req|
-          req.headers['Content-Type'] = 'application/json'
-          req.headers['Authorization'] = "ApiKey #{@key}"
+          url = "/#{@indice}"
+          req.url(url)
+          req.body = {}.to_json
+        end
+      end
 
+      def delete_index!
+        @client.delete do |req|
           url = "/#{@indice}"
           req.url(url)
           req.body = {}.to_json
@@ -87,9 +124,6 @@ module ElasticMiniQuery::Client
 
       def template!(name, patterns, properties, order: nil)
         @client.put do |req|
-          req.headers['Content-Type'] = 'application/json'
-          req.headers['Authorization'] = "ApiKey #{@key}"
-
           url = "/_template/#{name}"
           body = {
             "index_patterns": patterns,
@@ -105,11 +139,8 @@ module ElasticMiniQuery::Client
 
       def post!(id, doc)
         @client.post do |req|
-          req.headers['Content-Type'] = 'application/json'
-          req.headers['Authorization'] = "ApiKey #{@key}"
-
-          url = "/#{@indice}/#{@type}/#{id}"
           url = @dialector.indice_url(@indice, @type, id)
+          url += "?refresh" if sync?
           body = doc.to_json
           req.url(url)
           req.body = body
@@ -118,9 +149,6 @@ module ElasticMiniQuery::Client
 
       def mapping!(mapping)
         res = @client.put do |req|
-          req.headers['Content-Type'] = 'application/json'
-          req.headers['Authorization'] = "ApiKey #{@key}"
-
           url = @dialector.mapping_url(@indice, @type)
           body = mapping.to_json
           req.url(url)
