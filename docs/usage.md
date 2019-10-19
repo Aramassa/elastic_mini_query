@@ -3,42 +3,141 @@
 ## Initialize Query Class
 
 ```ruby
-class ElasticSimpleQuery < ElasticMiniQuery
-  es_host: "http://localhost:9200"
-  es_api_key: "some api key"
+class ElasticSimpleQuery < ElasticMiniQuery::Client::Base
+  elastic_mini_host "http://localhost:9200"
+  elastic_mini_api_key "some api key"
 
+  ## request all data
+  def get_all_docs
+    request do |builder|
+      builder.indices = "bank"
+    end
+  end
 end
 
-esq = ElasticSimpleQuery.new
+client = ElasticSimpleQuery.new
 ```
 
-## Search
+## Create Index / Mapping / Templaste
+
+|Operation|Compatibility|
+|---|---|
+|Mapping|URL Only (Body not compatible)|
+|Template|URL Only (Body not compatible)|
+|POST to Index|Nothing|
+
+### Mapping
+
+```ruby
+poster.mapping!({
+  properties: {
+    "name": {
+      type: "keyword"
+    }
+  }
+})
+```
+
+### Template
+
+```ruby
+poster.templaste!("example-tpl", ["example-*", "sample-*"], {
+  "name": {
+    type: "keyword"
+  },
+  "host_name": {
+   "type": "keyword"
+  }
+}, order: 30)
+```
+
+* options
+  * order : adapt priority
+
+### Indice
+
+* create empty index
+
+```ruby
+poster.empty_index!
+````
+
+## String Match
 
 * all columns
 
 ```ruby
-esq.q("hello")
+build do |builder|
+  builder.indices = "bank"
+end
 ```
 
 * specify columns
 
 ```ruby
-esq.q("hello", columns: ["col_a", "col_b"])
+## Single
+build do |builder|
+  builder.indices = "bank"
+  builder.query.match("word", :address)
+end
+
+## Multiple
+build do |builder|
+  builder.indices = "bank"
+  builder.query.match("word", [:address, :firstname])
+end
+```
+
+* multiple words
+
+```ruby
+## Match any words
+build do |builder|
+  builder.indices = "bank"
+  builder.query.match("word1 word2 word3").match_any
+end 
+
+## Phrase Match
+build do |builder|
+  builder.indices = "bank"
+  builder.query.match("word1 word2 word3").match_phrase
+end  
 ```
 
 ## Aggregation
 
+### Metric Aggregations
+
 ```ruby
-esq.agg
-  .by_date(:day, format: 'YYYY-mm-dd')
-  .filter(...)
-  .agg("col_a", type: [:min, :max, :avg])
+build do |builder|
+  builder.indices = "bank"
+  builder.aggs.agg(:balance, [:max, :avg, :min])
+end
 ```
+
+### Bucket Aggregations
+
+#### Date Histogram
+
+```ruby
+build do |builder|
+  builder.indices = "bank"
+  builder.aggs.agg(:balance, [:max, :avg, :min])
+    .date_histogram("@timestamp", :day, order: :desc, format: 'yyyy-MM-dd')
+end
+```
+
+* options
+
+|Option|Description|Type|Value|
+|---|---|---|---|
+|timezone|set timezone offset for "key_as_string"|String|"+09:00"|
+|order| |Symbol|:desc / :asc |
 
 ## fetch responses
 
 ```ruby
-res = esq.q("hello")
+res = esq.get_all_docs.execute
 res.docs.each do |row, info|
   # data processing
 end

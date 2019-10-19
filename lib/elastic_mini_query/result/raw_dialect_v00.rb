@@ -1,6 +1,6 @@
 module ElasticMiniQuery
-  module Query
-    class Request
+  module Result
+    class RawDialectV00
     end
   end
 end

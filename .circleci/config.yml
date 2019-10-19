@@ -1,17 +1,26 @@
 # Use the latest 2.1 version of CircleCI pipeline processing engine, see https://circleci.com/docs/2.0/configuration-reference/
 version: 2.1
 
+notify:
+  webhooks:
+    - url: https://outlook.office.com/webhook/407f5d2c-7620-490d-951a-7e8a3a9b3625@d52f78ca-85da-4450-9941-ac3fee2b6af6/CircleCI/6cec7adc13ed4d3980520a3ac37fdf39/6bc44637-3745-44cb-8139-6a1269444b1e
+
 executors:
   base-rails:
     working_directory: /app
     docker:
       - image: mosac/rails-start:2.6.3-rails5.2.3
+      - image: aramassa/elastic_mini_query_test:7.1.1
+        environment:
+          "discovery.type": "single-node"
 
 jobs:
   do-rspec:
     executor: base-rails
     steps:
       - checkout
+      - run: while ! nc -z localhost 9200; do sleep 0.1; done
+      - run: curl -O "http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=300s"
       - run: bundle install
       - run: bundle exec rspec
 
