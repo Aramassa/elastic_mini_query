@@ -96,7 +96,11 @@ Or with docker-compose(recommended)
 docker-compose -f docker-compose.yml -f docker-compose/rspec.yml run app
 ```
 
-See: https://www.elastic.co/guide/en/kibana/7.1/tutorial-load-dataset.html
+#### Loading data for spec
+
+```sh
+bundle exec rspec spec/seed/*.rb
+```
 
 ## Contributing
 
