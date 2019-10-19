@@ -90,13 +90,9 @@ docker-compose -f docker-compose.yml -f docker-compose/rspec.yml run app
 
 #### Loading Sample Data
 
-* 7.x
-
 ```sh
-docker-compose exec elasticsearch /es_scripts/7.x.start.sh
+bundle exec rspec spec/seed/*.rb
 ```
-
-See: https://www.elastic.co/guide/en/kibana/7.1/tutorial-load-dataset.html
 
 ## Contributing
 
