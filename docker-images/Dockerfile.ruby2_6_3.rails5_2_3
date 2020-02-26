@@ -2,7 +2,7 @@ FROM library/ruby:2.6.3-alpine3.9
 LABEL maintainer="Mosac https://github.com/Mosac"
 
 WORKDIR /app
-ADD Gemfile.rails5_2_3 /app/Gemfile
+ADD docker-images/Gemfile.rails5_2_3 /app/Gemfile
 
 RUN apk update && \
     apk upgrade && \
