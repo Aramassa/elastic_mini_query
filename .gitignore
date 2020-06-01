@@ -13,3 +13,6 @@
 
 # docker-compose
 .docker-env*
+
+# builded gem package
+*.gem
