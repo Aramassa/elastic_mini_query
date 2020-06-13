@@ -5,7 +5,7 @@ on:
       - master
     paths:
       - "**.drawio"
-      - .github/workflows/drawio-export.yaml
+      - .github/workflows/drawio-export.yml
 jobs:
   drawio-export:
     runs-on: ubuntu-latest
@@ -16,8 +16,7 @@ jobs:
       - name: Export drawio files to asciidoctor and png files
         uses: docker://rlespinasse/drawio-export:latest
         env:
-          DRAWIO_EXPORT_FILEEXT: adoc
-          DRAWIO_EXPORT_CLI_OPTIONS: -t
+          DRAWIO_EXPORT_FILEEXT: png
           DRAWIO_EXPORT_FOLDER: assets
 
       - name: Commit changed files

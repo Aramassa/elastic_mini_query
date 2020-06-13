@@ -1,4 +1,0 @@
-= class_diagram Page-1
-
-image::class_diagram-Page-1.png[Page-1]
-
