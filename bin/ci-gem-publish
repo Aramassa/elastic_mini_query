@@ -1,0 +1,3 @@
+#!/bin/bash
+
+act push --secret-file .cisecrets --env-file .cienv -j build-gem

@@ -1,7 +1,4 @@
 #!/bin/bash
 
-source .cisecrets
-source .cienv
-
-act --env-file .cienv -j drawio-export
+act --secret-file .cisecrets --env-file .cienv -j drawio-export
 
