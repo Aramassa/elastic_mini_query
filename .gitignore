@@ -13,3 +13,7 @@
 
 # docker-compose
 .docker-env*
+.cisecrets
+
+# builded gem package
+*.gem
