@@ -22,9 +22,20 @@ jobs:
           --health-retries 12
     steps:
       - uses: actions/checkout@v1
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+      - name: Cache bundler modules
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gem-
       - name: Prepare Spec
         run: |
-          bundle install
+          bundle config path vendor/bundle
+          bundle install -j4
           bundle exec rake spec:data:prepare
     
     
