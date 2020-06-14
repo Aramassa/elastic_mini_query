@@ -20,7 +20,7 @@ jobs:
       - name: Wait for ElasticSearch
         run: |
           while ! nc -z localhost 9200; do sleep 0.1; done
-          curl -O "http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=300s
+          curl -O "http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=300s"
       - name: Prepare Spec
         run: |
           bundle install
