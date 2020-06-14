@@ -15,12 +15,13 @@ jobs:
           - 9200:9200
         env:
           "discovery.type": "single-node"
+        options: >-
+          --health-cmd "curl -O http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=300s"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
     steps:
       - uses: actions/checkout@v1
-      - name: Wait for ElasticSearch
-        run: while ! nc -z localhost 9200; do sleep 0.1; done
-      - name: Wait ElasticSearch cluster ready.
-        run: curl -O "http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=300s"
       - name: Prepare Spec
         run: |
           bundle install
