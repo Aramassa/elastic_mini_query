@@ -1,0 +1,29 @@
+name: Spec
+on: push
+
+jobs:
+  rspec:
+    name: Rspec with ElasticSearch
+    runs-on: ubuntu-latest
+    # `container-job`と実行されるサービスコンテナ
+    services:
+      # サービスコンテナへのアクセスに使われるラベル
+      elasticsearch:
+        # Docker Hubのイメージ
+        image: aramassa/elastic_mini_query_test:7.1.1
+        ports:
+          - 9200
+        env:
+          "discovery.type": "single-node"
+    steps:
+      - uses: actions/checkout@v1
+      - name: Wait for ElasticSearch
+        run: |
+          while ! nc -z elasticsearch 9200; do sleep 0.1; done
+          curl -O "http://elasticsearch:9200/_cluster/health?wait_for_status=yellow&timeout=300s
+      - name: Prepare Spec
+        run: |
+          bundle install
+          bundle exec rake spec:data:prepare
+    
+    
